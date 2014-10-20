@@ -1,0 +1,13 @@
+{
+    "require": {
+        "symfony/yaml": "2.*",
+        "monolog/monolog": ">=1.0.0",
+        "silex/silex": "1.*@dev",
+        "imagine/Imagine": "*@dev"
+    },
+    "autoload": {
+        "psr-0": {
+            "ImageStack": "lib"
+        }
+    }
+}
