@@ -1,6 +1,6 @@
 {
     "minimum-stability": "dev",
-    "name": "quazardous/ImageStack",
+    "name": "quazardous/ImageStack2",
     "license": "MIT",
     "require": {
         "symfony/yaml": "2.*",
