@@ -1,7 +1,5 @@
 <?php
 
-include __DIR__.'/../vendor/autoload.php';
-
 $app = include __DIR__.'/bootstrap.php';
 
 $app['session.storage.handler'] = null; // no sessions

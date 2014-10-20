@@ -9,9 +9,6 @@ use ImageStack\Mount\Loader\YamlLoader;
 class MountLoadersProvider implements ServiceProviderInterface
 {
 
-    function boot(Container $app)
-    {}
-
     function register(Container $app)
     {
         

@@ -4,6 +4,10 @@ setlocale(LC_ALL, 'fr_FR.utf8', 'fr_FR', 'fr');
 
 date_default_timezone_set('Europe/Paris');
 
+$loader = include __DIR__.'/../vendor/autoload.php';
+
+$loader->set('ImageStack\\', realpath(__DIR__ . '/../../src'));
+
 use ImageStack\Application as ImageStackApplication;
 $app = new ImageStackApplication;
 

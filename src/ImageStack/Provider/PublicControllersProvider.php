@@ -10,8 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PublicControllersProvider implements ServiceProviderInterface, ControllerProviderInterface
 {
-	function boot(Container $app) {
-	}
 
 	function register(Container $app) {
 		$app['controller.front'] = function() use ($app) {

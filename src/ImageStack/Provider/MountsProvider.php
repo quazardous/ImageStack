@@ -8,9 +8,6 @@ use ImageStack\ApplicationAwareInterface;
 class MountsProvider implements ServiceProviderInterface
 {
 
-    function boot(Container $app)
-    {}
-
     function register(Container $app)
     {
         foreach ((array) $app['config']['mount.d'] as $folder) {
@@ -20,6 +17,7 @@ class MountsProvider implements ServiceProviderInterface
 
     protected function loadConfigsFromFolder(Container $app, $folder)
     {
+        $app->log('BootstrapConfig', "scan $folder");
         foreach (scandir($folder) as $key => $entry) {
             $entryPath = $folder . '/' . $entry;
             if ($entry == '.' || $entry == '..')

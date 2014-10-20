@@ -225,7 +225,7 @@
             "source": {
                 "type": "git",
                 "url": "../",
-                "reference": "967762f29664eb9cde31988cdb36fa451b012a5f"
+                "reference": "0b92ad089a32477868eb98d51d1686f396d2d4e3"
             },
             "require": {
                 "imagine/imagine": "@dev",
@@ -253,7 +253,7 @@
             "keywords": [
                 "image"
             ],
-            "time": "2014-10-20 14:25:08"
+            "time": "2014-10-20 15:02:33"
         },
         {
             "name": "silex/silex",

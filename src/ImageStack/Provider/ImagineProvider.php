@@ -5,9 +5,6 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 class ImagineProvider implements ServiceProviderInterface {
-
-	function boot(Container $app) {
-	}
 	
 	function register(Container $app) {
 		$app['imagine'] = function() use ($app) {
