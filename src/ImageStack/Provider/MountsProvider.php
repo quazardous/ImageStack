@@ -1,24 +1,24 @@
 <?php
 namespace ImageStack\Provider;
 
-use Silex\Application;
-use Silex\ServiceProviderInterface;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 use ImageStack\ApplicationAwareInterface;
 
 class MountsProvider implements ServiceProviderInterface
 {
 
-    function boot(Application $app)
+    function boot(Container $app)
     {}
 
-    function register(Application $app)
+    function register(Container $app)
     {
         foreach ((array) $app['config']['mount.d'] as $folder) {
             $this->loadConfigsFromFolder($app, $folder);
         }
     }
 
-    protected function loadConfigsFromFolder(Application $app, $folder)
+    protected function loadConfigsFromFolder(Container $app, $folder)
     {
         foreach (scandir($folder) as $key => $entry) {
             $entryPath = $folder . '/' . $entry;

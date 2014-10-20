@@ -1,7 +1,6 @@
 <?php
 namespace ImageStack\Backend;
 
-use Silex\Application;
 use ImageStack\Image;
 use ImageStack\OptionableComponent;
 use ImageStack\Service\AppableServiceInterface;
@@ -46,14 +45,4 @@ class StackBackend extends OptionableComponent implements BackendInterface {
 		return false;
 	}
 	
-	public function setApp(Application $app) {
-	  if ($this->app) return;
-	  parent::setApp($app);
-	  foreach ($this->backends as $backend) {
-	    // on injecte $app en recursif dans les propriétés qui en ont besoin...
-	    if ($backend instanceof AppableServiceInterface) {
-	      $backend->setApp($app);
-	    }
-	  }
-	}
 }

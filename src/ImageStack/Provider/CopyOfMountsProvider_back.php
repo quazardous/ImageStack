@@ -2,7 +2,7 @@
 namespace ImageStack\Provider;
 
 use Silex\Application;
-use Silex\ServiceProviderInterface;
+use Pimple\ServiceProviderInterface;
 use ImageStack\Backend\ProxyBackend;
 use ImageStack\Backend\StackBackend;
 use ImageStack\Backend\FileBackend;

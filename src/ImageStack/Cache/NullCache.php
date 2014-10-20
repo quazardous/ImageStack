@@ -3,6 +3,10 @@ namespace ImageStack\Cache;
 
 use ImageStack\OptionableComponent;
 
+/**
+ * No cache.
+ *
+ */
 class NullCache extends OptionableComponent implements CacheInterface {
 
 	public function __construct() {

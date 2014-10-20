@@ -3,6 +3,10 @@ namespace ImageStack\Cache;
 
 use ImageStack\OptionableComponent;
 
+/**
+ * Basic file cache.
+ *
+ */
 class FileCache extends OptionableComponent implements CacheInterface {
 
 	public function __construct($options = array()) {

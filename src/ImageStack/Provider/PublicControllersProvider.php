@@ -2,20 +2,21 @@
 namespace ImageStack\Provider;
 
 use Silex\Application;
-use Silex\ServiceProviderInterface;
-use Silex\ControllerProviderInterface;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use Silex\Api\ControllerProviderInterface;
 use ImageStack\Controller\Front;
 use Symfony\Component\HttpFoundation\Request;
 
 class PublicControllersProvider implements ServiceProviderInterface, ControllerProviderInterface
 {
-	function boot(Application $app) {
+	function boot(Container $app) {
 	}
 
-	function register(Application $app) {
-		$app['controller.front'] = $app->share(function() use ($app) {
+	function register(Container $app) {
+		$app['controller.front'] = function() use ($app) {
 			return new Front();
-		});
+		};
 	}
 
   public function connect(Application $app) {

@@ -1,7 +1,7 @@
 <?php
 namespace ImageStack\Controller;
 
-use Silex\Application;
+use ImageStack\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use ImageStack\Mount\MountInterface;

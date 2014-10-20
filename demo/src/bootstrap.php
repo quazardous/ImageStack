@@ -1,18 +1,14 @@
 <?php
 
-$env = getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : (defined('APPLICATION_ENV') ? APPLICATION_ENV : 'production');
-
 setlocale(LC_ALL, 'fr_FR.utf8', 'fr_FR', 'fr');
 
 date_default_timezone_set('Europe/Paris');
 
-use ImageStack\Application as MainApplication;
-$app = new MainApplication;
+use ImageStack\Application as ImageStackApplication;
+$app = new ImageStackApplication;
 
-$configs = include __DIR__.'/config/config.php';
-$app['config'] = $configs[$env];
-unset($configs);
-unset($env);
+$app['config'] = include __DIR__.'/config/config.php';
+
 
 $app['debug'] = $app['config']['debug'];
 
@@ -21,14 +17,8 @@ $app->register(new MonologServiceProvider(), array(
 		'monolog.logfile' => __DIR__.'/../logs/imagestack.log',
 ));
 
-use Silex\Provider\ValidatorServiceProvider;
-$app->register(new ValidatorServiceProvider);
-
 use ImageStack\Provider\ListenersProvider;
 $app->register(new ListenersProvider());
-
-use ImageStack\Provider\CoreServicesProvider;
-$app->register(new CoreServicesProvider);
 
 use ImageStack\Provider\StoragesProvider;
 $app->register(new StoragesProvider());

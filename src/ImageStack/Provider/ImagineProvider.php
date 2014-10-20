@@ -1,16 +1,16 @@
 <?php
 namespace ImageStack\Provider;
 
-use Silex\Application;
-use Silex\ServiceProviderInterface;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 
 class ImagineProvider implements ServiceProviderInterface {
 
-	function boot(Application $app) {
+	function boot(Container $app) {
 	}
 	
-	function register(Application $app) {
-		$app['imagine'] = $app->share(function() use ($app) {
+	function register(Container $app) {
+		$app['imagine'] = function() use ($app) {
 			
 			$driver = 'gd';
 			if (isset($app['config']['imagine.driver'])) {
@@ -24,6 +24,6 @@ class ImagineProvider implements ServiceProviderInterface {
 				default:
 					return new \Imagine\Gd\Imagine();
 			}
-		});
+		};
 	}
 }

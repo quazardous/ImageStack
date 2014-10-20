@@ -3,6 +3,9 @@ namespace ImageStack;
 
 use Imagine\Image\ImagineInterface;
 
+/**
+ * Simple image abstraction class.
+ */
 class Image {
 	
 	protected $type;
