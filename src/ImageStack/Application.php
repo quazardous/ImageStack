@@ -25,8 +25,8 @@ class Application extends ApplicationBase {
     }
     
     public function log($component, $message, $level = 'info') {
-        if (isset($this['logger']) && isset($app['monolog.logger.class']) && is_a($this['logger'], $app['monolog.logger.class'])) {
-            $this['logger']->$level(sprintf("%s %s", $this->getName(), $message));
+        if (isset($this['logger']) && isset($this['monolog.logger.class']) && is_a($this['logger'], $this['monolog.logger.class'])) {
+            $this['logger']->$level(sprintf("%s %s", $component, $message));
         }
     }
 }

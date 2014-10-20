@@ -3,7 +3,7 @@ namespace ImageStack\Provider;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use ImageStack\ApplicationAwareInterface;
+use ImageStack\Application;
 
 class MountsProvider implements ServiceProviderInterface
 {
@@ -15,9 +15,9 @@ class MountsProvider implements ServiceProviderInterface
         }
     }
 
-    protected function loadConfigsFromFolder(Container $app, $folder)
+    protected function loadConfigsFromFolder(Application $app, $folder)
     {
-        $app->log('BootstrapConfig', "scan $folder");
+        $app->log(get_class($this), "scan $folder");
         foreach (scandir($folder) as $key => $entry) {
             $entryPath = $folder . '/' . $entry;
             if ($entry == '.' || $entry == '..')
