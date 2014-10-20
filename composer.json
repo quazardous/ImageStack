@@ -1,13 +1,16 @@
 {
+    "minimum-stability": "dev",
+    "name": "quazardous/ImageStack",
+    "license": "MIT",
     "require": {
         "symfony/yaml": "2.*",
         "monolog/monolog": ">=1.0.0",
-        "silex/silex": "1.*@dev",
+        "silex/silex": "*@dev",
         "imagine/Imagine": "*@dev"
     },
     "autoload": {
         "psr-0": {
-            "ImageStack": "lib"
+            "ImageStack\\": "lib/"
         }
     }
 }
