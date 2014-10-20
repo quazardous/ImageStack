@@ -37,10 +37,10 @@ class StackBackend extends OptionableComponent implements BackendInterface {
 	public function getImage($path) {
 		foreach ($this->backends as $backend) {
 		  if ($image = $backend->getImage($path)) {
-		    $this->app['logger']->info(sprintf("%s > %s [%s] =OK", $this->getName(), $backend->getName(), $path));
+		    $this->app->log($this->getName(), sprintf("> %s [%s] =OK", $backend->getName(), $path));
 		    return $image;
 		  }
-		  $this->app['logger']->info(sprintf("%s > %s [%s] =KO", $this->getName(), $backend->getName(), $path));
+		  $this->app->log($this->getName(), sprintf("> %s [%s] =KO", $backend->getName(), $path));
 		}
 		return false;
 	}

@@ -42,7 +42,7 @@ class FileBackend extends OptionableComponent implements BackendInterface {
 		$filename = $this->getFilename($path);
 		$data = @file_get_contents($filename);
 		if ($data === false) return false;
-		$this->app['logger']->info($this->getName()." $filename >");
+		$this->app->log($this->getName(), "$filename >");
 		$type = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 		if ($type == 'jpg') {
 			$type = 'jpeg';

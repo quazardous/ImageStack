@@ -225,7 +225,7 @@
             "source": {
                 "type": "git",
                 "url": "../",
-                "reference": "ffea14b9fdd87126b8ef01543461612b930cc88d"
+                "reference": "967762f29664eb9cde31988cdb36fa451b012a5f"
             },
             "require": {
                 "imagine/imagine": "@dev",
@@ -234,15 +234,26 @@
                 "symfony/yaml": "2.*"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "ImageStack\\": "src/"
-                }
+                },
+                "files": [
+                    "src/stubs/functions.php"
+                ]
             },
             "license": [
                 "MIT"
             ],
-            "time": "2014-10-20 14:01:44"
+            "keywords": [
+                "image"
+            ],
+            "time": "2014-10-20 14:25:08"
         },
         {
             "name": "silex/silex",

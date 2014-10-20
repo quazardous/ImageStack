@@ -124,7 +124,7 @@ class ManipulatorBackend extends OptionableComponent implements BackendInterface
 		}
 		catch (\Exception $e) {
 		  // fix
-		  $this->app['logger']->info($this->getName()." fix cache $path");
+		  $this->app->log($this->getName(), "fix cache $path");
 		  $this->cacheSet($src, null);
 		  return false;
 		}

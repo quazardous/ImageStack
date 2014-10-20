@@ -41,7 +41,7 @@ class OptimizedFileStorage extends FileStorage {
 				if ($data === FALSE) {
 					throw new \RuntimeException("Error : cannot read $dst");
 				}
-				$this->app['logger']->info($this->getName()." pngcrush =");
+				$this->app->log($this->getName(), "pngcrush =");
 				break;
 				
 			case 'jpeg':
@@ -55,7 +55,7 @@ class OptimizedFileStorage extends FileStorage {
 				if ($ret != 0) {
 					throw new \RuntimeException("Error : jpegtran ($ret)");
 				}
-				$this->app['logger']->info($this->getName()." jpegtran =");
+				$this->app->log($this->getName(), "jpegtran =");
 				break;
 			default:
 			  unlink($src);

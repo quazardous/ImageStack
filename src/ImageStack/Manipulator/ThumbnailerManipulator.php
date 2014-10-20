@@ -27,12 +27,12 @@ class ThumbnailerManipulator extends OptionableComponent implements ManipulatorI
 			  
 			  if (is_numeric($format)) {
 			    // si numeric on veut juste du reporting et 404
-			    $this->app['logger']->info(sprintf("%s Unhandled [%s]", $this->getName(), $matches[$format]));
+			    $this->app->log($this->getName(), sprintf("Unhandled [%s]", $matches[$format]));
 			    return false;
 			  }
 			  
-				$this->thumbnail($image, $format);
-				return true;
+    			$this->thumbnail($image, $format);
+    			return true;
 			}
 		}
 		// par défaut on laisse passer l'image originale
@@ -52,6 +52,6 @@ class ThumbnailerManipulator extends OptionableComponent implements ManipulatorI
 		$im = $image->getImage();
 		$thumbnail = $im->thumbnail($size, $mode);
 		$image->setData($thumbnail->get($image->getType()));
-		$this->app['logger']->info($this->getName()." $format =");
+		$this->app->log($this->getName(), "$format =");
 	}
 }

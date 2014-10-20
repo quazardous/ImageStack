@@ -14,11 +14,9 @@ $app['debug'] = $app['config']['debug'];
 
 use Silex\Provider\MonologServiceProvider;
 $app->register(new MonologServiceProvider(), array(
-		'monolog.logfile' => __DIR__.'/../logs/imagestack.log',
+        'monolog.name' => 'ImageStackDemo',
+		'monolog.logfile' => __DIR__.'/../var/logs/imagestackdemo.log',
 ));
-
-use ImageStack\Provider\ListenersProvider;
-$app->register(new ListenersProvider());
 
 use ImageStack\Provider\StoragesProvider;
 $app->register(new StoragesProvider());

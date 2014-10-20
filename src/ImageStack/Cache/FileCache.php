@@ -26,7 +26,7 @@ class FileCache extends OptionableComponent implements CacheInterface {
 		// pas de sortie d'erreur !
 		$res = @file_get_contents($filename = $this->getFilename($cid));
 		if ($res !== false) {
-			$this->app['logger']->info($this->getName()." $filename >");
+			$this->app->log($this->getName(), "$filename >");
 		}
 		return ($res===false ? null : $res);
 	}
@@ -43,7 +43,7 @@ class FileCache extends OptionableComponent implements CacheInterface {
 		}
 	  $res = file_put_contents($filename, $data);
 		if ($res !== false) {
-			$this->app['logger']->info($this->getName()." $filename <");
+			$this->app->log($this->getName(), "$filename <");
 		}
 		return $res;
 	}

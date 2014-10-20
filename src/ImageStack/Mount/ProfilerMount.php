@@ -52,15 +52,15 @@ class ProfilerMount extends DefaultMount {
 	    }
 	  }
 	  
-	  $this->app['logger']->info(sprintf("%s(%s) %s : %dx%d (%d) [%s] =%s",
-	      $this->getName(),
-	      $this->mount,
-	      $path,
-	      $w,
-	      $h,
-	      $l,
-	      $profile,
-	      $found));
+	  $this->app->log($this->getName(),
+	      sprintf("%s/%s %dx%d (%d) [%s] =%s",
+    	      $this->mount,
+    	      $path,
+    	      $w,
+    	      $h,
+    	      $l,
+    	      $profile,
+    	      $found));
 		
 		return $image;
 	}

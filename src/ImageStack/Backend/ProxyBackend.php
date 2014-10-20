@@ -74,7 +74,7 @@ class ProxyBackend extends OptionableComponent implements BackendInterface {
 		if ($res['status'] != '200' || strlen($res['data']) == 0) {
 			throw new \RuntimeException("Error : $url invalid");
 		}
-		$this->app['logger']->info($this->getName()." $url >");
+		$this->log($this->getName(), " $url >");
 		return $res['data'];
 	}
 	

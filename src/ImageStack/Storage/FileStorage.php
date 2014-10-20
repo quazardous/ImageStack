@@ -33,7 +33,7 @@ class FileStorage extends OptionableComponent implements StorageInterface {
 		if (!file_put_contents($filename, $data)) {
 			throw new \RuntimeException("Error : cannot write $filename");
 		}
-		$this->app['logger']->info($this->getName()." $filename <");
+		$this->app->log($this->getName(), "$filename <");
 	}
 }
   
