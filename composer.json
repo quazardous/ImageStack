@@ -6,6 +6,7 @@
     "require": {
         "symfony/yaml": "2.*",
         "symfony/dependency-injection": "2.*",
+        "symfony/config": "2.*",
         "monolog/monolog": ">=1.0.0",
         "silex/silex": "@dev",
         "imagine/Imagine": "@dev"
