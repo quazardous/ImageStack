@@ -8,6 +8,21 @@ $loader = include __DIR__.'/../vendor/autoload.php';
 
 $loader->set('ImageStack\\', realpath(__DIR__ . '/../../src'));
 
+//TODO
+//https://igor.io/2012/11/09/scaling-silex.html
+// http://gonzalo123.com/2012/09/03/dependency-injection-containers-with-php-when-pimple-is-not-enough/
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+
+$container = new ContainerBuilder();
+$loader = new YamlFileLoader($container, new FileLocator(__DIR__));
+$loader->load(__DIR__ . '/services.yml');
+
+//$container->setParameter("ROOT_PATH", dirname(__DIR__));
+
+//http://gonzalo123.com/2013/02/11/scaling-silex-applications/
+
 use ImageStack\Application as ImageStackApplication;
 $app = new ImageStackApplication;
 

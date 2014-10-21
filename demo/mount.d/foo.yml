@@ -1,0 +1,9 @@
+storage.default:
+  type: optimized-file
+#  class: false
+mount.m:
+  point: m
+  type: default
+#  class: ImageStack\Mount\DefaultMount
+  
+  storage: default
