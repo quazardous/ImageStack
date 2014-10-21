@@ -23,3 +23,22 @@ function array_merge_recursive_distinct ( array $array1, array $array2 )
 
 	return $merged;
 }
+
+/**
+ * Get a camelcase from an id type string.
+ *  ie. my-nice-id -> myNiceId
+ * 
+ * @param string $string
+ * @param string $capitalizeFirstCharacter
+ * @return string
+ */
+function strtocamelcase($string, $capitalizeFirstCharacter = false)
+{
+    $str = str_replace(' ', '', ucwords(str_replace('-', ' ', strtolower($string))));
+
+    if (!$capitalizeFirstCharacter) {
+        $str = lcfirst($str);
+    }
+
+    return $str;
+}
