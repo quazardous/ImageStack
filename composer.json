@@ -3,8 +3,9 @@
     "keywords": ["image"],
     "license": "MIT",
     "require": {
-        "imagine/Imagine": "@dev",
-        "guzzlehttp/guzzle": "^6.2"
+        "imagine/Imagine": "^0.6",
+        "guzzlehttp/guzzle": "^6.2",
+        "doctrine/cache": "^1.6"
     },
     "autoload": {
         "psr-0": {
