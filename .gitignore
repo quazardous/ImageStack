@@ -1,3 +1,9 @@
 /.settings
 /.buildpath
 /.project
+/vendor/
+/.*.md.html
+/composer-dev.json
+/composer-dev.lock
+/composer.lock
+

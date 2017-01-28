@@ -1,71 +1,69 @@
 <?php
 namespace ImageStack;
 
-use Imagine\Image\ImagineInterface;
+use ImageStack\Api\ImageInterface;
 
 /**
- * Simple image abstraction class.
+ * Basic image implementation.
  */
-class Image {
-	
-	protected $type;
-	protected $data;
-	
-	/**
-	 * @var \Imagine\Image\ImagineInterface
-	 */
-	protected $imagine;
-	
-	/**
-	 * @var \Imagine\Image\ImageInterface
-	 */
-	protected $image;
-	
-	/**
-	 * Get Imagine image.
-	 * @return \Imagine\Image\ImageInterface
-	 */
-	public function getImage() {
-	  return $this->image;
-	}
-	
-	/**
-	 * @param \Imagine\Image\ImagineInterface $imagine
-	 * @param string $type
-	 * @param string $data
-	 */
-	public function __construct(ImagineInterface $imagine, $type = null, $data = null) {
-	  $this->imagine = $imagine;
-		$this->setType($type);
-		$this->setData($data);
-	}
-	
-	/**
-	 * @throws \Exception if $data is invalid
-	 * @param string $data
-	 */
-	public function setData($data) {
-	  $this->image = $this->imagine->load($data);
-		$this->data = $data;
-	}
-	
-	public function &getData() {
-		return $this->data;
-	}
-	
-	public function setType($type) {
-		$this->type = $type;
-	}
-	
-	public function getType() {
-		return $this->type;
-	}
-	
-	public function getMime() {
-		switch ($this->getType()) {
-			case 'png': return 'image/png';
-			case 'jpeg': return 'image/jpeg';
-			default: return 'image/' . $this->getType();
-		}
-	}
+class Image implements ImageInterface
+{
+
+    /**
+     * @var string
+     */
+    protected $mimeType;
+
+    /**
+     * @var string
+     */
+    protected $binaryContent;
+
+    /**
+     * Image constructor.
+     * This implementation tries to guess the MIME type.
+     * @param string $binaryContent      
+     * @param string $mimeType      
+     */
+    public function __construct($binaryContent, $mimeType = null)
+    {
+        $this->setBinaryContent($binaryContent, $mimeType);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \ImageStack\Api\ImageInterface::setBinaryContent()
+     */
+    public function setBinaryContent($binaryContent, $mimeType = null)
+    {
+        $this->binaryContent = $binaryContent;
+        $this->mimeType = $mimeType;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \ImageStack\Api\ImageInterface::getBinaryContent()
+     */
+    public function getBinaryContent()
+    {
+        return $this->binaryContent;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \ImageStack\Api\ImageInterface::getMimeType()
+     * @throws ImageException
+     */
+    public function getMimeType()
+    {
+        if (empty($this->mimeType)) {
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $this->mimeType = $finfo->buffer($this->binaryContent);
+            if (empty($this->mimeType)) {
+                throw new ImageException('Cannot determine MIME type', ImageException::CANNOT_DETERMINE_MIME_TYPE);
+            }
+        }
+        return $this->mimeType;
+    }
+    
 }
