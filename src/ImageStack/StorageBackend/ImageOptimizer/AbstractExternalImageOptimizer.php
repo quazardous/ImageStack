@@ -3,7 +3,7 @@ namespace ImageStack\StorageBackend\ImageOptimizer;
 
 use ImageStack\OptionnableTrait;
 use ImageStack\Api\ImageInterface;
-use ImageStack\StoageBackend\Exception\StorageBackendException;
+use ImageStack\StorageBackend\Exception\StorageBackendException;
 
 /**
  * Abstract class to handle external optimizer (like jpegtran).

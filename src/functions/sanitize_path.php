@@ -7,6 +7,7 @@ if (!function_exists('sanitize_path')) {
      */
     function sanitize_path($path) {
         $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
+        $isRoot = $path[0] == DIRECTORY_SEPARATOR;
         $path = explode(DIRECTORY_SEPARATOR, $path);
         $parts = array_filter($path, 'strlen');
         $absolutes = [];
@@ -18,6 +19,6 @@ if (!function_exists('sanitize_path')) {
                 $absolutes[] = $part;
             }
         }
-        return implode(DIRECTORY_SEPARATOR, $absolutes);
+        return ($isRoot ? DIRECTORY_SEPARATOR : '') . implode(DIRECTORY_SEPARATOR, $absolutes);
     }
 }

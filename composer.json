@@ -10,7 +10,8 @@
             "ImageStack\\": "src/"
         },
         "files": [
-            "src/functions/sanitize_path.php"
+            "src/functions/sanitize_path.php",
+            "src/functions/tempdir.php"
         ]
     }
 }

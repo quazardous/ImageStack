@@ -32,7 +32,7 @@ class OptimizedFileStorageBackend extends FileStorageBackend {
 	 */
 	public function storeImage(ImageInterface $image, ImagePathInterface $path) {
 		$this->optimizeImage($image);
-		$this->writeImageFile($image->getBinaryContent(), $path);
+		$this->writeImageFile($image, $path);
 	}
 	
 	/**

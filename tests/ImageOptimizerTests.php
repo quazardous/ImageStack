@@ -5,13 +5,12 @@ use ImageStack\Image;
 use ImageStack\StorageBackend\ImageOptimizer\JpegtranImageOptimizer;
 use ImageStack\StorageBackend\ImageOptimizer\PngcrushImageOptimizer;
 
-class ImageOptimizerTest extends \PHPUnit_Framework_TestCase
+class ImageOptimizerTests extends \PHPUnit_Framework_TestCase
 {
     
     public function testJpegtranOptimizer()
     {
-        $binaryContent = file_get_contents(__DIR__ . '/resources/photos/cat1_original.jpg');
-        $image = new Image($binaryContent);
+        $image = new Image(file_get_contents(__DIR__ . '/resources/photos/cat1_original.jpg'));
         
         $optimizer = new JpegtranImageOptimizer();
         
@@ -22,8 +21,7 @@ class ImageOptimizerTest extends \PHPUnit_Framework_TestCase
     
     public function testPngcrushOptimizer()
     {
-        $binaryContent = file_get_contents(__DIR__ . '/resources/photos/cat2_original.png');
-        $image = new Image($binaryContent);
+        $image = new Image(file_get_contents(__DIR__ . '/resources/photos/cat2_original.png'));
         
         $optimizer = new PngcrushImageOptimizer();
         

@@ -1,7 +1,7 @@
 <?php
 namespace ImageStack\StorageBackend\ImageOptimizer;
 
-use ImageStack\StoageBackend\Exception\StorageBackendException;
+use ImageStack\StorageBackend\Exception\StorageBackendException;
 
 /**
  * Pngcrush image optimizer.

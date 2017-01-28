@@ -17,5 +17,5 @@ interface ImagePathInterface {
      * The stack prefix is the part of the URL that is used to detect wich stack to trigger.
      * @return string|null
      */
-    public function getStackPrefix();
+    public function getPrefix();
 }

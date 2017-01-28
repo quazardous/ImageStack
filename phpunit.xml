@@ -23,9 +23,11 @@
          timeoutForLargeTests="60"
          verbose="false">
     <testsuites>
-        <testsuite name="ImageStack Test Suite">
-            <file>tests/ImageTest.php</file>
-            <file>tests/ImageOptimizerTest.php</file>
+        <testsuite name="ImageStack Tests Suite">
+            <file>tests/ImagePathTests.php</file>
+            <file>tests/ImageTests.php</file>
+            <file>tests/ImageOptimizerTests.php</file>
+            <file>tests/FileStorageBackendTests.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
