@@ -19,4 +19,13 @@ class ImageTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('image/dummy', $image->getMimeType());
     }
     
+    /**
+     * @expectedException ImageStack\Exception\ImageException
+     * @expectedExceptionCode ImageStack\Exception\ImageException::EMPTY_IMAGE
+     */
+    public function testEmptyImage()
+    {
+        new Image('');
+    }
+    
 }

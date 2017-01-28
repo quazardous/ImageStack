@@ -17,6 +17,7 @@ class FileStorageBackend implements StorageBackendInterface {
 	 * @param array $options
 	 * Options can be :
 	 *   - mode : mkdir mode (default 0755)
+	 *   - allowed_mime : array of allowed MIME types (default: [image/jpeg, image/png, image/gif])
 	 */
 	public function __construct($root, $options = []) {
 	    if (empty($root)) {

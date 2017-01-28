@@ -27,7 +27,8 @@
             <file>tests/ImagePathTests.php</file>
             <file>tests/ImageTests.php</file>
             <file>tests/ImageOptimizerTests.php</file>
-            <file>tests/FileStorageBackendTests.php</file>
+            <file>tests/ImageBackendTests.php</file>
+            <file>tests/StorageBackendTests.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

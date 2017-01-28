@@ -2,6 +2,7 @@
 namespace ImageStack;
 
 use ImageStack\Api\ImageInterface;
+use ImageStack\Exception\ImageException;
 
 /**
  * Basic image implementation.
@@ -36,6 +37,9 @@ class Image implements ImageInterface
      */
     public function setBinaryContent($binaryContent, $mimeType = null)
     {
+        if (empty($binaryContent)) {
+            throw new ImageException('Empty image', ImageException::EMPTY_IMAGE);
+        }
         $this->binaryContent = $binaryContent;
         $this->mimeType = $mimeType;
     }

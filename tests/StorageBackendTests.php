@@ -7,7 +7,7 @@ use ImageStack\ImagePath;
 use ImageStack\StorageBackend\OptimizedFileStorageBackend;
 use ImageStack\StorageBackend\ImageOptimizer\JpegtranImageOptimizer;
 
-class FileStorageBackendTests extends \PHPUnit_Framework_TestCase
+class StorageBackendTests extends \PHPUnit_Framework_TestCase
 {
     
     public function testFileStorageBackend()

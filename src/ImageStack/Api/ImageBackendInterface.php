@@ -9,13 +9,13 @@ interface ImageBackendInterface {
 	
 	/**
 	 * Fetch the image from the image backend
-	 * 
 	 * @param ImagePathInterface $path
+	 * @return ImageInterface
 	 * 
-	 * @return ImageInterface|false
-	 * NB: returns false when the image was not found (404).
+	 * @throws Exception\ImageBackendException
 	 * 
-	 * @throws Exception\ImageBackendException if something goes wrong other than 404
+	 * For 404 Not Found implementation should throw a Exception\ImageBackendException
+	 * with code Exception\ImageBackendException::IMAGE_NOT_FOUND.
 	 */
 	public function fetchImage(ImagePathInterface $path);
 }
