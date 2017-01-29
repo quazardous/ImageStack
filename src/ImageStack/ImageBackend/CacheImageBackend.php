@@ -64,7 +64,7 @@ class CacheImageBackend implements ImageBackendInterface
         if (false !== ($binaryContent = $this->cache->fetch($cid))) {
             return new Image($binaryContent);
         }
-        $image = $this->imageBackend->fetchImage($cid);
+        $image = $this->imageBackend->fetchImage($path);
         $this->cache->save($cid, $image->getBinaryContent(), $this->getOption('cache_lifetime', 0));
         return $image;
     }

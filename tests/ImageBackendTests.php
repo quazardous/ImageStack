@@ -7,6 +7,8 @@ use ImageStack\ImageBackend\HttpImageBackend;
 use ImageStack\ImageBackend\SequentialImageBackend;
 use ImageStack\ImageBackend\CallbackImageBackend;
 use ImageStack\Api\ImagePathInterface;
+use ImageStack\Cache\RawFileCache;
+use ImageStack\ImageBackend\CacheImageBackend;
 
 class ImageBackendTests extends \PHPUnit_Framework_TestCase
 { 
@@ -111,4 +113,45 @@ class ImageBackendTests extends \PHPUnit_Framework_TestCase
         $this->assertStringEqualsFile($root . '/' . $path, $image->getBinaryContent());
     }
     
+    public function testCacheImageBackend()
+    {
+        $root = __DIR__ . '/resources';
+        $fib = new FileImageBackend($root);
+        
+        $cacheRoot = TESTDIR . '/cache_backend';
+        $cache = new RawFileCache($cacheRoot);
+        
+        $cib = new CacheImageBackend($fib, $cache);
+        
+        // warmup our cache
+        $path = 'photos/cat1_original.jpg';
+        $image = $cib->fetchImage(new ImagePath($path));
+        
+        $this->assertStringEqualsFile($root . '/' . $path, $image->getBinaryContent());
+        
+        // bad backend
+        $bib = new CallbackImageBackend(function (ImagePathInterface $path) {
+           throw new \LogicException('No image');
+        });
+        
+        // using our cache with the bad backend
+        $cib = new CacheImageBackend($bib, $cache);
+        
+        // making evident bad backend throws exception for unknown image...
+        $exception = false;
+        try {
+            $cib->fetchImage(new ImagePath('unknown.jpg'));
+            $this->assertTrue(false);
+        } catch (\LogicException $e) {
+            $exception = true;
+            $this->assertEquals('No image', $e->getMessage());
+        }
+        $this->assertTrue($exception);
+        
+        // now the cached image should avoid exception
+        $image = $cib->fetchImage(new ImagePath($path));
+        
+        $this->assertStringEqualsFile($root . '/' . $path, $image->getBinaryContent());
+        
+    }
 }
