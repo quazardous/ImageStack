@@ -1,7 +1,7 @@
 <?php
-namespace ImageStack\StorageBackend\ImageOptimizer;
+namespace ImageStack\ImageOptimizer;
 
-use ImageStack\StorageBackend\Exception\StorageBackendException;
+use ImageStack\ImageOptimizer\Exception\ImageOptimizerException;
 
 /**
  * Pngcrush image optimizer.
@@ -11,7 +11,7 @@ class PngcrushImageOptimizer extends AbstractExternalImageOptimizer
 
     /**
      * {@inheritDoc}
-     * @see \ImageStack\StorageBackend\ImageOptimizer\AbstractExternalImageOptimizer::getInputFileExtension()
+     * @see \ImageStack\ImageOptimizer\AbstractExternalImageOptimizer::getInputFileExtension()
      */
     protected function getInputFileExtension()
     {
@@ -20,7 +20,7 @@ class PngcrushImageOptimizer extends AbstractExternalImageOptimizer
 
     /**
      * {@inheritDoc}
-     * @see \ImageStack\StorageBackend\ImageOptimizer\AbstractExternalImageOptimizer::getOutputFileExtension()
+     * @see \ImageStack\ImageOptimizer\AbstractExternalImageOptimizer::getOutputFileExtension()
      */
     protected function getOutputFileExtension()
     {
@@ -29,7 +29,7 @@ class PngcrushImageOptimizer extends AbstractExternalImageOptimizer
 
     /**
      * {@inheritDoc}
-     * @see \ImageStack\StorageBackend\ImageOptimizer\AbstractExternalImageOptimizer::execExternalOptimizer()
+     * @see \ImageStack\ImageOptimizer\AbstractExternalImageOptimizer::execExternalOptimizer()
      */
 	protected function execExternalOptimizer($if, &$binaryContent)
 	{
@@ -44,10 +44,10 @@ class PngcrushImageOptimizer extends AbstractExternalImageOptimizer
 	    $ret = null;
 	    exec(implode(' ', $cmd) . ' 2>&1', $output, $ret);
     	if ($ret !== 0) {
-			throw new StorageBackendException(sprintf('Exec error pngcrush (%d): %s', $ret, implode("\n", $output)), StorageBackendException::EXEC_ERROR);
+			throw new ImageOptimizerException(sprintf('Exec error pngcrush (%d): %s', $ret, implode("\n", $output)), ImageOptimizerException::EXEC_ERROR);
 		}
 		if (false === ($binaryContent = file_get_contents($of))) {
-			throw new StorageBackendException(sprintf('Cannot read tmpfile : %s', $of), StorageBackendException::CANNOT_READ_TMPFILE);
+			throw new ImageOptimizerException(sprintf('Cannot read tmpfile : %s', $of), ImageOptimizerException::CANNOT_READ_TMPFILE);
 		}
 		unlink($of);
 	    return 'image/png';

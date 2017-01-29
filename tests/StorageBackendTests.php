@@ -5,7 +5,7 @@ use ImageStack\Image;
 use ImageStack\StorageBackend\FileStorageBackend;
 use ImageStack\ImagePath;
 use ImageStack\StorageBackend\OptimizedFileStorageBackend;
-use ImageStack\StorageBackend\ImageOptimizer\JpegtranImageOptimizer;
+use ImageStack\ImageOptimizer\JpegtranImageOptimizer;
 
 class StorageBackendTests extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +16,7 @@ class StorageBackendTests extends \PHPUnit_Framework_TestCase
         $binaryContent = file_get_contents($originalPath);
         $image = new Image($binaryContent);
         
-        $root = tempdir('ImageStackTests');
+        $root = TESTDIR . '/basic';
         $fsb = new FileStorageBackend($root);
         
         $path = 'a/b/c/cat1.jpg';
@@ -35,7 +35,7 @@ class StorageBackendTests extends \PHPUnit_Framework_TestCase
         $binaryContent = file_get_contents($originalPath);
         $image = new Image($binaryContent);
         
-        $root = tempdir('ImageStackTests');
+        $root = TESTDIR . '/optimized';
         $fsb = new OptimizedFileStorageBackend($root);
         
         $fsb->registerImageOptimizer('image/jpeg', new JpegtranImageOptimizer());

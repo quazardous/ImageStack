@@ -1,9 +1,9 @@
 <?php
-namespace ImageStack\StorageBackend\ImageOptimizer;
+namespace ImageStack\ImageOptimizer;
 
 use ImageStack\OptionnableTrait;
 use ImageStack\Api\ImageInterface;
-use ImageStack\StorageBackend\Exception\StorageBackendException;
+use ImageStack\ImageOptimizer\Exception\ImageOptimizerException;
 
 /**
  * Abstract class to handle external optimizer (like jpegtran).
@@ -55,13 +55,13 @@ abstract class AbstractExternalImageOptimizer implements ImageOptimizerInterface
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \ImageStack\StorageBackend\ImageOptimizer\ImageOptimizerInterface::optimizeImage()
-	 * @throws StorageBackendException
+	 * @see \ImageStack\ImageOptimizer\ImageOptimizerInterface::optimizeImage()
+	 * @throws ImageOptimizerException
 	 */
 	public function optimizeImage(ImageInterface $image) {
 	    $if = $this->getTempnam("if", $this->getInputFileExtension());
 		if (!file_put_contents($if, $image->getBinaryContent())) {
-			throw new StorageBackendException(sprintf('Cannot write tmpfile : %s', $if), StorageBackendException::CANNOT_WRITE_TMPFILE);
+			throw new ImageOptimizerException(sprintf('Cannot write tmpfile : %s', $if), ImageOptimizerException::CANNOT_WRITE_TMPFILE);
 		}
 		$binaryContent = null;
 		$mimeType = $this->execExternalOptimizer($if, $binaryContent);

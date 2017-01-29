@@ -1,7 +1,7 @@
 <?php
-namespace ImageStack\StorageBackend\ImageOptimizer;
+namespace ImageStack\ImageOptimizer;
 
-use ImageStack\StorageBackend\Exception\StorageBackendException;
+use ImageStack\ImageOptimizer\Exception\ImageOptimizerException;
 
 /**
  * Pngcrush image optimizer.
@@ -11,7 +11,7 @@ class JpegtranImageOptimizer extends AbstractExternalImageOptimizer
 
     /**
      * {@inheritDoc}
-     * @see \ImageStack\StorageBackend\ImageOptimizer\AbstractExternalImageOptimizer::getInputFileExtension()
+     * @see \ImageStack\ImageOptimizer\AbstractExternalImageOptimizer::getInputFileExtension()
      */
     protected function getInputFileExtension()
     {
@@ -20,7 +20,7 @@ class JpegtranImageOptimizer extends AbstractExternalImageOptimizer
 
     /**
      * {@inheritDoc}
-     * @see \ImageStack\StorageBackend\ImageOptimizer\AbstractExternalImageOptimizer::execExternalOptimizer()
+     * @see \ImageStack\ImageOptimizer\AbstractExternalImageOptimizer::execExternalOptimizer()
      */
 	protected function execExternalOptimizer($if, &$binaryContent)
 	{
@@ -34,7 +34,7 @@ class JpegtranImageOptimizer extends AbstractExternalImageOptimizer
 	    passthru(implode(' ', $cmd), $ret);
 	    $binaryContent = ob_get_clean();
     	if ($ret !== 0) {
-			throw new StorageBackendException(sprintf('Exec error jpegtran (%d)', $ret), StorageBackendException::EXEC_ERROR);
+			throw new ImageOptimizerException(sprintf('Exec error jpegtran (%d)', $ret), ImageOptimizerException::EXEC_ERROR);
 		}
 	    return 'image/jpeg';
 	}

@@ -1,5 +1,5 @@
 <?php
-namespace ImageStack\StorageBackend\ImageOptimizer;
+namespace ImageStack\ImageOptimizer;
 
 use ImageStack\Api\ImageInterface;
 

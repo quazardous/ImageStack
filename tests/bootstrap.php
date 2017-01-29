@@ -32,7 +32,9 @@ echo sprintf(
 
 echo 'Waiting 0.5 second for server to land...' . PHP_EOL;
 usleep(500);
- 
+
+define('TESTDIR', tempdir('ImageStack'));
+
 // Kill the web server when the process ends
 register_shutdown_function(function() use ($pid) {
     echo sprintf('%s - Killing process with ID %d', date('r'), $pid) . PHP_EOL;

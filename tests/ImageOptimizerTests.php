@@ -2,8 +2,8 @@
 namespace ImageStack\Tests;
 
 use ImageStack\Image;
-use ImageStack\StorageBackend\ImageOptimizer\JpegtranImageOptimizer;
-use ImageStack\StorageBackend\ImageOptimizer\PngcrushImageOptimizer;
+use ImageStack\ImageOptimizer\JpegtranImageOptimizer;
+use ImageStack\ImageOptimizer\PngcrushImageOptimizer;
 
 class ImageOptimizerTests extends \PHPUnit_Framework_TestCase
 {

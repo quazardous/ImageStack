@@ -3,7 +3,7 @@ namespace ImageStack\StorageBackend;
 
 use ImageStack\Api\ImageInterface;
 use ImageStack\Api\ImagePathInterface;
-use ImageStack\StorageBackend\ImageOptimizer\ImageOptimizerInterface;
+use ImageStack\ImageOptimizer\ImageOptimizerInterface;
 
 class OptimizedFileStorageBackend extends FileStorageBackend {
 
