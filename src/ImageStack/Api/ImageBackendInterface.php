@@ -2,6 +2,7 @@
 namespace ImageStack\Api;
 
 /**
+ * API image backend interface.
  * Image backend represents the source of the images. Can be the FS or a distant server.
  *
  */

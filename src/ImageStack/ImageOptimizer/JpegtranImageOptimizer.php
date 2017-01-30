@@ -11,11 +11,31 @@ class JpegtranImageOptimizer extends AbstractExternalImageOptimizer
 
     /**
      * {@inheritDoc}
+     * @see \ImageStack\ImageOptimizer\ImageOptimizerInterface::getSupportedMimeTypes()
+     */
+    public function getSupportedMimeTypes()
+    {
+        return [
+            'image/jpeg',
+        ];
+    }
+    
+    /**
+     * {@inheritDoc}
      * @see \ImageStack\ImageOptimizer\AbstractExternalImageOptimizer::getInputFileExtension()
      */
     protected function getInputFileExtension()
     {
         return 'jpg';
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \ImageStack\ImageOptimizer\AbstractExternalImageOptimizer::checkIsMimeTypeSupported()
+     */
+    protected function checkIsMimeTypeSupported($mimeType)
+    {
+        return 'image/jpeg' == $mimeType;
     }
 
     /**

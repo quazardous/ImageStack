@@ -19,6 +19,19 @@ class ImageOptimizerTests extends \PHPUnit_Framework_TestCase
         $this->assertStringEqualsFile(__DIR__ . '/resources/optimizer/cat1_jpegtran.jpg', $image->getBinaryContent());
     }
     
+    /**
+     * @expectedException ImageStack\ImageOptimizer\Exception\ImageOptimizerException
+     * @expectedExceptionCode ImageStack\ImageOptimizer\Exception\ImageOptimizerException::UNSUPPORTED_MIME_TYPE
+     */
+    public function testPngcrushOptimizerUnsupportedMimeType()
+    {
+        $image = new Image(file_get_contents(__DIR__ . '/resources/photos/cat1_original.jpg'));
+        
+        $optimizer = new PngcrushImageOptimizer();
+        
+        $optimizer->optimizeImage($image);
+    }
+    
     public function testPngcrushOptimizer()
     {
         $image = new Image(file_get_contents(__DIR__ . '/resources/photos/cat2_original.png'));

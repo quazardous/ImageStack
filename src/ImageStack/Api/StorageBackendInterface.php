@@ -2,6 +2,7 @@
 namespace ImageStack\Api;
 
 /**
+ * API storage backend interface.
  * Storage backend is responsible of persisting the image on a (local) backend.
  * A typical backend is the file system (FS): at the next image HTTP request, the image will be serve statically (without ImageStack).
  *

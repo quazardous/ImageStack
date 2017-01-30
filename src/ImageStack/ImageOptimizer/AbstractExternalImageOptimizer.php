@@ -4,11 +4,13 @@ namespace ImageStack\ImageOptimizer;
 use ImageStack\OptionnableTrait;
 use ImageStack\Api\ImageInterface;
 use ImageStack\ImageOptimizer\Exception\ImageOptimizerException;
+use ImageStack\Api\ImageManipulatorInterface;
+use ImageStack\Api\ImagePathInterface;
 
 /**
  * Abstract class to handle external optimizer (like jpegtran).
  */
-abstract class AbstractExternalImageOptimizer implements ImageOptimizerInterface
+abstract class AbstractExternalImageOptimizer implements ImageOptimizerInterface, ImageManipulatorInterface
 {
     use OptionnableTrait;
     
@@ -59,6 +61,9 @@ abstract class AbstractExternalImageOptimizer implements ImageOptimizerInterface
 	 * @throws ImageOptimizerException
 	 */
 	public function optimizeImage(ImageInterface $image) {
+	    if (!in_array($image->getMimeType(), $this->getSupportedMimeTypes())) {
+			throw new ImageOptimizerException(sprintf('Unsupported MIME type : %s', $image->getMimeType()), ImageOptimizerException::UNSUPPORTED_MIME_TYPE);
+	    }
 	    $if = $this->getTempnam("if", $this->getInputFileExtension());
 		if (!file_put_contents($if, $image->getBinaryContent())) {
 			throw new ImageOptimizerException(sprintf('Cannot write tmpfile : %s', $if), ImageOptimizerException::CANNOT_WRITE_TMPFILE);
@@ -67,5 +72,16 @@ abstract class AbstractExternalImageOptimizer implements ImageOptimizerInterface
 		$mimeType = $this->execExternalOptimizer($if, $binaryContent);
 		unlink($if);
 		$image->setBinaryContent($binaryContent, $mimeType);
+	}
+	
+	/**
+	 * Optimizer can be used as image manipulator.
+	 * @param ImageInterface $image
+	 * @param ImagePathInterface $path (not used)
+	 * @see self::optimizeImage()
+	 */
+	public function manipulateImage(ImageInterface $image, ImagePathInterface $path)
+	{
+	    $this->optimizeImage($image);
 	}
 }

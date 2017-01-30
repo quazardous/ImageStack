@@ -8,7 +8,17 @@ use ImageStack\ImageOptimizer\Exception\ImageOptimizerException;
  */
 class PngcrushImageOptimizer extends AbstractExternalImageOptimizer
 {
-
+    /**
+     * {@inheritDoc}
+     * @see \ImageStack\ImageOptimizer\ImageOptimizerInterface::getSupportedMimeTypes()
+     */
+    public function getSupportedMimeTypes()
+    {
+        return [
+            'image/png',
+        ];
+    }
+    
     /**
      * {@inheritDoc}
      * @see \ImageStack\ImageOptimizer\AbstractExternalImageOptimizer::getInputFileExtension()
@@ -19,8 +29,8 @@ class PngcrushImageOptimizer extends AbstractExternalImageOptimizer
     }
 
     /**
-     * {@inheritDoc}
-     * @see \ImageStack\ImageOptimizer\AbstractExternalImageOptimizer::getOutputFileExtension()
+     * Return the output file extension.
+     * @return string
      */
     protected function getOutputFileExtension()
     {

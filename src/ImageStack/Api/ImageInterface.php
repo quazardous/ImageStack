@@ -2,7 +2,7 @@
 namespace ImageStack\Api;
 
 /**
- * Image interface.
+ * API image interface.
  *
  */
 interface ImageInterface {

@@ -8,6 +8,10 @@ use ImageStack\OptionnableTrait;
 
 use ImageStack\StorageBackend\Exception\StorageBackendException;
 
+/**
+ * File storage backend.
+ *
+ */
 class FileStorageBackend implements StorageBackendInterface {
 	use OptionnableTrait;
 	
