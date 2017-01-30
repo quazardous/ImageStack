@@ -21,8 +21,8 @@ interface ImageInterface {
     
     /**
      * Set the binary content.
-     * @param string $binaryContent the binary content.
-     * @param string $mimeType the mime type.
+     * @param string $binaryContent the binary content
+     * @param string $mimeType the mime type
      * NB: if the mime type is null the implementation should/could guess it
      */
     public function setBinaryContent($binaryContent, $mimeType = null);
