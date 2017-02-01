@@ -9,7 +9,7 @@ See [SilexImageStack](https://github.com/quazardous/SilexImageStack) and [SilexI
 
 ## Installation
 
-    composer require quazardous/ImageStack
+    composer require quazardous/imagestack
 
 ## Concept
 ### Typical flow
