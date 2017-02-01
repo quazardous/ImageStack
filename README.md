@@ -1,7 +1,7 @@
 # ImageStack
 A PHP image serving framework.
 
-The main goal is to provide a robust framework to create an image thumbnailer generator similar to [imagecache](https://www.drupal.org/project/imagecache) / [image style](https://www.drupal.org/docs/8/core/modules/image/working-with-images) in [Drupal](https://www.drupal.org/).
+The main goal is to provide a robust framework to create an "on the fly" image thumbnailer generator similar to [imagecache](https://www.drupal.org/project/imagecache) / [image style](https://www.drupal.org/docs/8/core/modules/image/working-with-images) in [Drupal](https://www.drupal.org/).
 
 This project is the lowest framework part. The framework is brick designed so that you can put together your own image serving project and add special bricks.
 
@@ -131,7 +131,7 @@ See `ImageStack\ImageManipulator\ThumbnailerImageManipulator`
 
 Path pattern rule, see `ImageStack\ImageManipulator\ThumbnailRule\PatternThumbnailRule`
 
-Tou can associate path patterns to thumbnail formats:
+You can associate path patterns to thumbnail formats:
 
 ```php
 $rules = [
