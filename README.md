@@ -13,7 +13,7 @@ See [SilexImageStack](https://github.com/quazardous/SilexImageStack) and [SilexI
 
 ## Concept
 ### Typical flow
-This describe the typical processing we want to achieve.
+This describes the typical processing we want to achieve.
 
 When the **front controller** handles an image HTTP request:
 
