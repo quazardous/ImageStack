@@ -3,9 +3,9 @@ A PHP image serving framework.
 
 The main goal is to provide a robust framework to create an "on the fly" image thumbnailer generator similar to [imagecache](https://www.drupal.org/project/imagecache) / [image style](https://www.drupal.org/docs/8/core/modules/image/working-with-images) in [Drupal](https://www.drupal.org/).
 
-This project is the lowest framework part. The framework is brick designed so that you can put together your own image serving project and add special bricks.
+This project is only the framework part. The framework is brick designed so that you can put together your own image serving project and add special bricks.
 
-See [SilexImageStack](https://github.com/quazardous/SilexImageStack) and [SilexImageStackDemo](https://github.com/quazardous/SilexImageStackDemo).
+See [SilexImageStack](https://github.com/quazardous/SilexImageStack) and [SilexImageStackDemo](https://github.com/quazardous/SilexImageStackDemo) for more infos.
 
 ## Installation
 
