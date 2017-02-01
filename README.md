@@ -70,7 +70,7 @@ This pseudo controller creates an image stack that will:
   - serve it
 
 
-```
+```php
 function myImageController($path)
 {
     $stack = new ImageStack(
