@@ -3,7 +3,7 @@ A PHP image serving framework.
 
 The main goal is to provide a robust framework to create an image thumbnailer generator similar to [imagecache](https://www.drupal.org/project/imagecache) / [image style](https://www.drupal.org/docs/8/core/modules/image/working-with-images) in [Drupal](https://www.drupal.org/).
 
-This project is the lowest framework part.
+This project is the lowest framework part. The framework is brick designed so that you can put together your own image serving project and add special bricks.
 
 See [SilexImageStack](https://github.com/quazardous/SilexImageStack) and [SilexImageStackDemo](https://github.com/quazardous/SilexImageStackDemo).
 
@@ -26,7 +26,7 @@ When the **front controller** handles an image HTTP request:
 
 Ideally the image file will be stored so that the next HTTP request will be statically served.
 
-### Lexicon
+### Lexicon / bricks
 
 #### Image path
 The path of the image that could come from the front controller.
@@ -100,7 +100,7 @@ See `ImageStack\ImageBackend\FileImageBackend`
 See `ImageStack\ImageBackend\HttpImageBackend`
 
 ##### Cache image backend
-Fetch image content from `Doctrine\Cache`.
+Add a cache layer before an image backend.
 
 See `ImageStack\ImageBackend\CacheImageBackend`
 
@@ -120,10 +120,44 @@ Optimize image.
 
 See `ImageStack\ImageManipulator\OptimizerImageManipulator`
 
+`jpegtran` wrapper, see `ImageStack\ImageOptimizer\JpegtranImageOptimizer`. 
+
+`pngcrush` wrapper, see `ImageStack\ImageOptimizer\PngcrushImageOptimizer`. 
+
 ##### Thumbnailer image manipulator
-Create an image thumbnail following with (path) rules.
+Create an image thumbnail with (path) rules.
 
 See `ImageStack\ImageManipulator\ThumbnailerImageManipulator`
+
+Path pattern rule, see `ImageStack\ImageManipulator\ThumbnailRule\PatternThumbnailRule`
+
+Tou can associate path patterns to thumbnail formats:
+
+```php
+$rules = [
+    '|^images/styles/big/|' => '<500x300', // resize to fit in 500x300 box
+    '|^images/styles/box/|' => '200x200', // resize/crop to 200x200 box
+    '|^images/styles/list/|' => '100', // resize/crop to 100x100 box
+    '|^images/([0-9]+)x([0-9]+)/|' => function ($matches) { return "{$matches[1]}x{$matches[2]}"; }, // custom resize/crop
+    '|.*|' => false, // trigger an image not found exception if nothing matches
+];
+
+$tim = new \ImageStack\ImageManipulator\ThumbnailerImageManipulator(new \Imagine\Gd\Imagine());
+
+foreach ($rules as $pattern => $format) {
+    $tim->addThumbnailRule(new \ImageStack\ImageManipulator\ThumbnailRule\PatternThumbnailRule($pattern, $format));
+}
+
+// this will resize the given image to fit in a 500x300 box
+$tim->manipulateImage($image, new ImagePath('images/styles/big/photo.jpg'));
+
+// this will resize/crop the given image to a 200x200 box
+$tim->manipulateImage($image, new ImagePath('images/200x150/photo.jpg'));
+
+// this will rise a 404
+$tim->manipulateImage($image, new ImagePath('bad/path/photo.jpg'));
+
+```
 
 ### Tests
 
