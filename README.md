@@ -156,7 +156,7 @@ Wrappers for external optimizer:
   - 0.9: pre version mainly a raw copy/paste from an old project
 
 ## Credits
-quazardous and others.
+[quazardous](https://github.com/quazardous) and others.
 
 ## License
 MIT
