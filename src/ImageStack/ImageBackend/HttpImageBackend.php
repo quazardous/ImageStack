@@ -8,6 +8,7 @@ use ImageStack\Api\ImagePathInterface;
 use ImageStack\ImageBackend\Exception\ImageBackendException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use ImageStack\Api\Exception\ImageNotFoundException;
 
 /**
  * HTTP image backend.
@@ -65,7 +66,7 @@ class HttpImageBackend implements ImageBackendInterface {
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 if ($e->getResponse()->getStatusCode() == 404) {
-                    throw new ImageBackendException(sprintf('Image Not Found : %s', $url), ImageBackendException::IMAGE_NOT_FOUND, $e);
+                    throw new ImageNotFoundException(sprintf('Image Not Found : %s', $url), null, $e);
                 }
             }
             throw new ImageBackendException(sprintf("Cannot read file : %s", $url), ImageBackendException::CANNOT_READ_FILE, $e);

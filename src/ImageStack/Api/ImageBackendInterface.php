@@ -14,9 +14,8 @@ interface ImageBackendInterface {
 	 * @return ImageInterface
 	 * 
 	 * @throws Exception\ImageBackendException
+	 * @throws Exception\ImageNotFoundException to notify image not found
 	 * 
-	 * For 404 Not Found implementation must throw a Exception\ImageBackendException
-	 * with code Exception\ImageBackendException::IMAGE_NOT_FOUND.
 	 */
 	public function fetchImage(ImagePathInterface $path);
 }

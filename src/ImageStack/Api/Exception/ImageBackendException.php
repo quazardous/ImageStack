@@ -7,5 +7,5 @@ namespace ImageStack\Api\Exception;
  */
 class ImageBackendException extends ImageStackException
 {
-    const IMAGE_NOT_FOUND = 0;
+    
 }

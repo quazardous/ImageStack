@@ -6,6 +6,7 @@ use ImageStack\Image;
 use ImageStack\Api\ImagePathInterface;
 use ImageStack\OptionnableTrait;
 use ImageStack\ImageBackend\Exception\ImageBackendException;
+use ImageStack\Api\Exception\ImageNotFoundException;
 
 /**
  * File image backend.
@@ -44,7 +45,7 @@ class FileImageBackend implements ImageBackendInterface {
     {
         $filename = $this->getImageFilename($path);
         if (!is_file($filename)) {
-            throw new ImageBackendException(sprintf('Image Not Found : %s', $filename), ImageBackendException::IMAGE_NOT_FOUND);
+            throw new ImageNotFoundException(sprintf('Image Not Found : %s', $filename));
         }
         if (false === ($binaryData = @file_get_contents($filename))) {
             throw new ImageBackendException(sprintf('Cannot read file : %s', $filename), ImageBackendException::CANNOT_READ_FILE);

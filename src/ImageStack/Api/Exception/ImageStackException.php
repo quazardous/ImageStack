@@ -7,5 +7,5 @@ namespace ImageStack\Api\Exception;
  */
 class ImageStackException extends \RuntimeException
 {
-    
+
 }

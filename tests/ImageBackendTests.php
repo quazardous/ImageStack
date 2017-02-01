@@ -24,8 +24,7 @@ class ImageBackendTests extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException ImageStack\ImageBackend\Exception\ImageBackendException
-     * @expectedExceptionCode ImageStack\ImageBackend\Exception\ImageBackendException::IMAGE_NOT_FOUND
+     * @expectedException ImageStack\Api\Exception\ImageNotFoundException
      */
     public function testFileImageBackendNotFound()
     {
@@ -48,8 +47,7 @@ class ImageBackendTests extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException ImageStack\ImageBackend\Exception\ImageBackendException
-     * @expectedExceptionCode ImageStack\ImageBackend\Exception\ImageBackendException::IMAGE_NOT_FOUND
+     * @expectedException ImageStack\Api\Exception\ImageNotFoundException
      */
     public function testHttpImageBackendNotFound()
     {
@@ -79,8 +77,7 @@ class ImageBackendTests extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException ImageStack\ImageBackend\Exception\ImageBackendException
-     * @expectedExceptionCode ImageStack\ImageBackend\Exception\ImageBackendException::IMAGE_NOT_FOUND
+     * @expectedException ImageStack\Api\Exception\ImageNotFoundException
      */
     public function testSequentialImageBackendNotFound()
     {

@@ -6,6 +6,7 @@ use ImageStack\Api\ImagePathInterface;
 use ImageStack\Api\Exception\ImageBackendException as ApiImageBackendException;
 use ImageStack\ImageBackend\Exception\ImageBackendException;
 use ImageStack\OptionnableTrait;
+use ImageStack\Api\Exception\ImageNotFoundException;
 
 /**
  * Sequential image backend.
@@ -36,13 +37,11 @@ class SequentialImageBackend implements ImageBackendInterface
                 if ($image = $imageBackend->fetchImage($path)) {
                     return $image;
                 }
-            } catch (ApiImageBackendException $e) {
-                if ($e->getCode() !== ApiImageBackendException::IMAGE_NOT_FOUND) {
-                    throw $e;
-                }
+            } catch (ImageNotFoundException $e) {
+                //nothing
             }
         }
-        throw new ImageBackendException(sprintf('Image Not Found : %s', $path->getPath()), ImageBackendException::IMAGE_NOT_FOUND);
+        throw new ImageNotFoundException(sprintf('Image Not Found : %s', $path->getPath()));
     }
     
     /**
