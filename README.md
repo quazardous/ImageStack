@@ -73,7 +73,7 @@ This pseudo controller creates an image stack that will:
 ```php
 function myImageController($path)
 {
-    $stack = new ImageStack(
+    $stack = new \ImageStack\ImageStack(
         new \ImageStack\ImageBackend\HttpImageBackend('https://images.example.com/backend/'),
         new \ImageStack\StorageBackend\FileStorageBackend('/var/www/my/local/image/storage/'));
     $oim = new \ImageStack\ImageManipulator\OptimizerImageManipulator();
