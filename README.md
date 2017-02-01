@@ -5,7 +5,7 @@ The main goal is to provide a robust framework to create an image thumbnailer ge
 
 This project is the lowest framework part.
 
-See [ImageStackSilex](quazardous/ImageStackSilex) and [ImageStackSilexDemo](quazardous/ImageStackSilexDemo).
+See [SilexImageStack](https://github.com/quazardous/SilexImageStack) and [SilexImageStackDemo](https://github.com/quazardous/SilexImageStackDemo).
 
 ## Installation
 
@@ -142,7 +142,7 @@ phpunit.phar
 ## Dependencies / support
 Tested against [PHP 5.6](http://php.net/) and [PHP 7.1](http://php.net/).
 
-Current implementation uses [Imagine](avalanche123/Imagine).
+Current implementation uses [Imagine](https://github.com/avalanche123/Imagine).
 
 You will need either `php-gd`, `php-gmagick` or `php-imagick`.
 
