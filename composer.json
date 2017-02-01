@@ -1,5 +1,5 @@
 {
-    "name": "quazardous/ImageStack",
+    "name": "quazardous/imagestack",
     "keywords": ["image"],
     "license": "MIT",
     "require": {
