@@ -1,7 +1,11 @@
 <?php
 namespace ImageStack\Api\Exception;
 
-class StorageBackendException extends \RuntimeException
+/**
+ * Storage backend exception.
+ *
+ */
+class StorageBackendException extends ImageStackException
 {
     
 }

@@ -2,7 +2,7 @@
 namespace ImageStack\Tests;
 
 use ImageStack\Image;
-use Imagine\Gd\Imagine;
+use Imagine\Image\ImagineInterface;
 
 class ImageTests extends \PHPUnit_Framework_TestCase
 {
@@ -41,16 +41,33 @@ class ImageTests extends \PHPUnit_Framework_TestCase
         $image->getImagineImage();
     }
     
-    public function testImagineImage()
+    protected function _testImagineImage(ImagineInterface $imagine)
     {
         $filename = __DIR__ . '/resources/photos/cat1_original.jpg';
         $image = new Image(file_get_contents($filename));
         $this->assertEquals('image/jpeg', $image->getMimeType());
         $this->assertStringEqualsFile($filename, $image->getBinaryContent());
         
-        $image->setImagine(new Imagine);
+        $image->setImagine($imagine);
         $ii = $image->getImagineImage();
         $image->setImagineImage($ii, 'image/png');
         $this->assertStringNotEqualsFile($filename, $image->getBinaryContent());
+        
+        $filename = __DIR__ . '/resources/optimizer/cat1_jpegtran.jpg';
+        $image = new Image(file_get_contents($filename));
+        $this->assertEquals('image/jpeg', $image->getMimeType());
+        $this->assertStringEqualsFile($filename, $image->getBinaryContent());
     }
+    
+    public function testAllImagineImage()
+    {
+        $this->_testImagineImage(new \Imagine\Gd\Imagine);
+        if (class_exists('Gmagick')) {
+            $this->_testImagineImage(new \Imagine\Gmagick\Imagine);
+        }
+        if (class_exists('Imagick')) {
+            $this->_testImagineImage(new \Imagine\Imagick\Imagine);
+        }
+    }
+    
 }

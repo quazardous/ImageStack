@@ -1,7 +1,11 @@
 <?php
 namespace ImageStack\Api\Exception;
 
-class ImageBackendException extends \RuntimeException
+/**
+ * Image backend exception.
+ *
+ */
+class ImageBackendException extends ImageStackException
 {
     const IMAGE_NOT_FOUND = 0;
 }

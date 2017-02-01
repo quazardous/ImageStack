@@ -6,6 +6,11 @@ use ImageStack\Api\ImagePathInterface;
 use ImageStack\ImageOptimizer\ImageOptimizerInterface;
 use ImageStack\Api\ImageManipulatorInterface;
 
+/**
+ * Optimizer image manipulator.
+ * Allow to register many image optimizer by MIME type.
+ *
+ */
 class OptimizerImageManipulator implements ImageManipulatorInterface {
 
     /**

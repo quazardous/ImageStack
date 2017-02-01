@@ -13,8 +13,9 @@ use Imagine\Image\ImageInterface as ImagineImageInterface;
  * We try to lazy manage binary content to minimize imagine processing
  *   when many image manipulators uses imagine image one after each other.
  */
-class Image implements ImageInterface
+class Image implements ImageWithImagineInterface
 {
+    use ImagineAwareTrait;
 
     /**
      * @var string
@@ -32,20 +33,12 @@ class Image implements ImageInterface
     protected $binaryContentDirty;
     
     /**
-     * @return boolean
+     * {@inheritDoc}
+     * @see \ImageStack\ImageWithImagineInterface::deprecateBinaryContent()
      */
-    public function getBinaryContentDirty()
+    public function deprecateBinaryContent()
     {
-        return $this->binaryContentDirty;    
-    }
-    
-    /**
-     * Flag image binary content to be regenerated from imagine image.
-     * @param boolean $dirty
-     */
-    public function setBinaryContentDirty($dirty = true)
-    {
-        $this->binaryContentDirty = $dirty;
+        $this->binaryContentDirty = true;
     }
 
     /**
@@ -54,9 +47,10 @@ class Image implements ImageInterface
      * @param string $binaryContent      
      * @param string $mimeType      
      */
-    public function __construct($binaryContent, $mimeType = null)
+    public function __construct($binaryContent, $mimeType = null, ImagineInterface $imagine = null)
     {
         $this->setBinaryContent($binaryContent, $mimeType);
+        $this->setImagine($imagine);
     }
 
     /**
@@ -70,7 +64,8 @@ class Image implements ImageInterface
         }
         $this->binaryContent = $binaryContent;
         $this->mimeType = $mimeType;
-        $this->setBinaryContentDirty(false);
+        $this->binaryContentDirty = false;
+        $this->imagineImage = null;
     }
 
     /**
@@ -79,7 +74,7 @@ class Image implements ImageInterface
      */
     public function getBinaryContent()
     {
-        if ($this->getBinaryContentDirty()) {
+        if ($this->binaryContentDirty) {
             $mimeType = $this->getMimeType();
             $binaryContent = $this->getImagineImage()->get(
                     self::get_type_from_mime_type($mimeType),
@@ -105,26 +100,11 @@ class Image implements ImageInterface
         }
         return $this->mimeType;
     }
-    
-    /**
-     * @var ImagineInterface
-     */
-    protected $imagine = null;
-    
+
     /**
      * @var array
      */
     protected $imagineOptions = [];
-    
-    /**
-     * Set imagine interace.
-     * @param ImagineInterface $imagine
-     * @param array $imagineOptions
-     */
-    public function setImagine(ImagineInterface $imagine, array $imagineOptions = [])
-    {
-        $this->imagine = $imagine;
-    }
     
     /**
      * Set imagine options for binary content generation.
@@ -136,14 +116,8 @@ class Image implements ImageInterface
     }
     
     /**
-     * Get imagine interface.
-     * @return ImagineInterface
+     * @throws ImageException
      */
-    public function getImagine()
-    {
-        return $this->imagine;
-    }
-    
     protected function assertImagine()
     {
         if (!$this->getImagine()) {
@@ -157,9 +131,8 @@ class Image implements ImageInterface
 	protected $imagineImage;
 	
 	/**
-	 * Return an iamgine image object from the image binary content.
-	 * @throws ImageException
-	 * @return ImagineImageInterface
+	 * {@inheritDoc}
+	 * @see \ImageStack\ImageWithImagineInterface::getImagineImage()
 	 */
     public function getImagineImage()
     {
@@ -182,28 +155,45 @@ class Image implements ImageInterface
      * Changing the image OR the MIME type will flag the binary content as "dirty".
      * Calling getBinaryContent() will trigger an ImagineImageInterface::get().
      * 
-     * Passing a NULL value to $imagineImage will immediately trigger the binary
-     *   content generation (before null assignment). $mimeType will be ignored.
-     * 
      * @see self::getBinaryContent()
      */
-    public function setImagineImage(ImagineImageInterface $imagineImage = null, $mimeType = null)
+    
+    /**
+     * {@inheritDoc}
+     * @see \ImageStack\ImageWithImagineInterface::setImagineImage()
+     * 
+     * Changing the image OR the MIME type will flag the binary content as "dirty".
+     * Calling getBinaryContent() will trigger an ImagineImageInterface::get().
+     */
+    public function setImagineImage(ImagineImageInterface $imagineImage, $mimeType = null)
     {
-        if ($imagineImage) {
-            if (!$mimeType) {
-                $mimeType = $this->getMimeType();
-            }
-            if ($this->imagineImage !== $imagineImage || $mimeType != $this->getMimeType()) {
-                // imagine image was changed OR MIME type was changed
-                //  -> we flag binary content to be regerated from imagine image
+        if (!$mimeType) {
+            $mimeType = $this->getMimeType();
+        }
+        if ($this->imagineImage !== $imagineImage || $mimeType != $this->getMimeType()) {
+            // imagine image was changed OR MIME type was changed
+            //  -> we flag binary content to be regerated from imagine image
+            if ($this->imagineImage !== $imagineImage) {
                 $this->imagineImage = $imagineImage;
-                $this->mimeType = $mimeType;
-                $this->setBinaryContentDirty();
             }
-        } else {
-            // assert binary content is clean
-            $this->getBinaryContent();
-            $this->imagineImage = null;
+            if ($this->mimeType !== $mimeType) {
+                $this->mimeType = $mimeType;
+            }
+            $this->binaryContentDirty = true;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     * @see \ImageStack\ImageWithImagineInterface::setMimeType()
+     */
+    public function setMimeType($mimeType)
+    {
+        if ($mimeType != $this->getMimeType()) {
+            // ensure that we got an internal imagine image
+            $this->getImagineImage();
+            $this->mimeType = $mimeType;
+            $this->binaryContentDirty = true;
         }
     }
     
@@ -221,4 +211,5 @@ class Image implements ImageInterface
         if (isset($types[$mimeType])) return $types[$mimeType];
         throw new ImageException(sprintf('Unsupported MIME type: %s', $mimeType), ImageException::UNSUPPORTED_MIME_TYPE);
     }
+
 }

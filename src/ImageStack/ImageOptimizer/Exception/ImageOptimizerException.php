@@ -1,7 +1,9 @@
 <?php
 namespace ImageStack\ImageOptimizer\Exception;
 
-class ImageOptimizerException extends \RuntimeException
+use ImageStack\Api\Exception\ImageStackException;
+
+class ImageOptimizerException extends ImageStackException
 {
     const CANNOT_READ_TMPFILE = 1;
     const CANNOT_WRITE_TMPFILE = 2;

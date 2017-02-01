@@ -1,7 +1,11 @@
 <?php
 namespace ImageStack\Api\Exception;
 
-class ImageException extends \RuntimeException
+/**
+ * Image exception.
+ *
+ */
+class ImageException extends ImageStackException
 {
     
 }
