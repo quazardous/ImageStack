@@ -1,5 +1,6 @@
 {
     "name": "quazardous/imagestack",
+    "description" : "A PHP image serving framework",
     "keywords": ["image"],
     "license": "MIT",
     "require": {
