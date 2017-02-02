@@ -23,14 +23,14 @@ class ConverterImageManipulator implements ImageManipulatorInterface, ImagineAwa
     /**
      * Converter image manipulator constructor.
      * @param ImagineInterface $imagine
-     * @param array $convertMap associative array [ <current_mime> => <new_mime> ]
+     * @param array $conversions associative array [ <current_mime> => <new_mime> ]
      * @param array $options
      *   - imagine_options : array of options to pass to imagine (jpeg_quality, png_compression_level, etc)
      */
-	public function __construct(ImagineInterface $imagine, array $convertMap, array $options = [])
+	public function __construct(ImagineInterface $imagine, array $conversions = [], array $options = [])
 	{
 	    $this->setImagine($imagine);
-        foreach ($convertMap as $sourceMimeType => $destinationMimeType) {
+        foreach ($conversions as $sourceMimeType => $destinationMimeType) {
             $this->addConversion($sourceMimeType, $destinationMimeType);
         }
         $this->setOptions($options);
