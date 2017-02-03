@@ -5,7 +5,9 @@ use ImageStack\Api\ImageBackendInterface;
 use ImageStack\Api\ImagePathInterface;
 use ImageStack\Image;
 use ImageStack\OptionnableTrait;
-use ImageStack\ImageBacken\PathRule\PathRuleInterface;
+use ImageStack\ImageBackend\PathRule\PathRuleInterface;
+use ImageStack\Api\Exception\ImageNotFoundException;
+use ImageStack\Api\ImageInterface;
 
 /**
  * Path rule image backend.
@@ -41,21 +43,34 @@ class PathRuleImageBackend implements ImageBackendInterface
         $this->setOptions($options);
     }
     
+    /**
+     * @var PathRuleInterface[]
+     */
     protected $rules = [];
+    
+    /**
+     * Add path rule.
+     * @param PathRuleInterface $rule
+     */
     public function addPathRule(PathRuleInterface $rule)
     {
         $this->rules[] = $rule;
     }
 
+    /**
+     * {@inheritDoc}
+     * @see \ImageStack\Api\ImageBackendInterface::fetchImage()
+     * @return ImageInterface
+     * @throws ImageNotFoundException if no match
+     */
     public function fetchImage(ImagePathInterface $path)
     {
-        $cid = $this->getCacheId($path);
-        if (false !== ($binaryContent = $this->cache->fetch($cid))) {
-            return new Image($binaryContent);
+        foreach ($this->rules as $rule) {
+            if ($newPath = $rule->createPath($path)) {
+                return $this->imageBackend->fetchImage($newPath);
+            }
         }
-        $image = $this->imageBackend->fetchImage($path);
-        $this->cache->save($cid, $image->getBinaryContent(), $this->getOption('cache_lifetime', 0));
-        return $image;
+        throw new ImageNotFoundException(sprintf('Image not found: %s', $path->getPath()));
     }
     
 }

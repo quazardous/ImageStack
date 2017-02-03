@@ -9,6 +9,8 @@ use ImageStack\ImageBackend\CallbackImageBackend;
 use ImageStack\Api\ImagePathInterface;
 use ImageStack\Cache\RawFileCache;
 use ImageStack\ImageBackend\CacheImageBackend;
+use ImageStack\ImageBackend\PathRuleImageBackend;
+use ImageStack\ImageBackend\PathRule\PatternPathRule;
 
 class ImageBackendTests extends \PHPUnit_Framework_TestCase
 { 
@@ -150,5 +152,19 @@ class ImageBackendTests extends \PHPUnit_Framework_TestCase
         
         $this->assertStringEqualsFile($root . '/' . $path, $image->getBinaryContent());
         
+    }
+    
+     
+    public function testPathRuleImageBackend()
+    {
+        $root = __DIR__ . '/resources';
+        $fib = new FileImageBackend($root);
+        
+        $rib = new PathRuleImageBackend($fib);
+        $rib->addPathRule(new PatternPathRule('|^(style/big/)(.*)$|', [2]));
+        
+        $path = 'photos/cat1_original.jpg';
+        $image = $rib->fetchImage(new ImagePath('style/big/' . $path));
+        $this->assertStringEqualsFile($root . '/' . $path, $image->getBinaryContent());
     }
 }
