@@ -4,6 +4,10 @@ namespace ImageStack\ImageManipulator\ThumbnailRule;
 use ImageStack\Api\ImageInterface;
 use ImageStack\Api\ImagePathInterface;
 
+/**
+ * Thumbnail rule interface.
+ *
+ */
 interface ThumbnailRuleInterface
 {
     /**

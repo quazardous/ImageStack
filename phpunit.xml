@@ -26,6 +26,7 @@
         <testsuite name="ImageStack Tests Suite">
             <file>tests/ImagePathTests.php</file>
             <file>tests/ImageTests.php</file>
+            <file>tests/RuleTests.php</file>
             <file>tests/ImageOptimizerTests.php</file>
             <file>tests/ImageBackendTests.php</file>
             <file>tests/ImageManipulatorTests.php</file>

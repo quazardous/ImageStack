@@ -10,7 +10,7 @@ use ImageStack\Api\Exception\ImageNotFoundException;
 use ImageStack\ImageManipulator\ThumbnailRule\Exception\ThumbnailRuleException;
 
 /**
- * Pattern thumbanil rule.
+ * Pattern thumbnail rule.
  *
  */
 class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterface
@@ -33,7 +33,7 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
      * Pattern thumbnail rule constructor.
      * @param string $pattern to match the path
      * @param boolean|string|callable $format thumbnail format
-     * if format is a callable, it will be executed first with $mathes as arg (the 3rd arg of the preg_match($pattern, $path, $matches)).
+     * if format is a callable, it will be executed first with $matches as arg (the 3rd arg of the preg_match($pattern, $path, $matches)).
      * The final format can be:
      *  - (string) [<]<Width>x<Height>: a rectangle
      *  - (string) [<]<Length>: a square (shortcut for <Length>x<Length>)
