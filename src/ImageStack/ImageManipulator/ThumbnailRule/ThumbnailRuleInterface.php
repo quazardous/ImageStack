@@ -7,7 +7,7 @@ use ImageStack\Api\ImagePathInterface;
 interface ThumbnailRuleInterface
 {
     /**
-     * Apply a condition thumbnail transformation.
+     * Apply a conditional thumbnail transformation.
      * @param ImageInterface $image
      * @param ImagePathInterface $path
      * 
