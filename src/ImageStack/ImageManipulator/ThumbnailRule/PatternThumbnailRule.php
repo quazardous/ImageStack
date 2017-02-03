@@ -97,6 +97,10 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
 		} else {
 			throw new ThumbnailRuleException(sprintf('Unsupported rule format: %s', (string)$format), ThumbnailRuleException::UNSUPPORTED_RULE_FORMAT);
 		}
+        // not very LSP but handy
+        if (!$image->getImagine()) {
+           $image->setImagine($this->getImagine());
+        }
 		$thumbnail = $image->getImagineImage()->thumbnail($size, $mode);
 		$image->setImagineImage($thumbnail);
 		return true;
