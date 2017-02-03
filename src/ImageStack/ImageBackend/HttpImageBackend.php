@@ -71,7 +71,7 @@ class HttpImageBackend implements ImageBackendInterface {
             }
             throw new ImageBackendException(sprintf("Cannot read file : %s", $url), ImageBackendException::CANNOT_READ_FILE, $e);
         }
-        $content = $response->getBody();
+        $content = (string)($response->getBody());
         $contentType = $response->getHeader('content-type');
         return isset($contentType[0]) ? $contentType[0] : null;
     }
