@@ -23,6 +23,7 @@ class HttpImageBackend implements ImageBackendInterface {
 	 * @param string $rootUrl the root URL to look after images
 	 * @param array $options
 	 *   - curl : array of CURL options
+	 *   - intercept_exception : intercept all guzzle exception to throw an image not found exception (default: false)
 	 */
 	public function __construct($rootUrl, $options = array()) {
 	    if (!filter_var($rootUrl, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED)) {
@@ -30,7 +31,6 @@ class HttpImageBackend implements ImageBackendInterface {
 	    }
 		$this->setOptions($options);
 		$this->setOption('root_url', $rootUrl);
-	  
 	}
 	
 	/**
@@ -69,7 +69,11 @@ class HttpImageBackend implements ImageBackendInterface {
                     throw new ImageNotFoundException(sprintf('Image Not Found : %s', $url), null, $e);
                 }
             }
-            throw new ImageBackendException(sprintf("Cannot read file : %s", $url), ImageBackendException::CANNOT_READ_FILE, $e);
+            if ($this->getOption('intercept_exception', false)) {
+                throw new ImageNotFoundException(sprintf('Image Not Found : %s', $url), null, $e);
+            } else {
+                throw new ImageBackendException(sprintf("Cannot read file : %s", $url), ImageBackendException::CANNOT_READ_FILE, $e);
+            }
         }
         $content = (string)($response->getBody());
         $contentType = $response->getHeader('content-type');
