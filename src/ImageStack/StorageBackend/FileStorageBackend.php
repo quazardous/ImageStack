@@ -20,6 +20,7 @@ class FileStorageBackend implements StorageBackendInterface {
 	 * @param string $root the root folder to write images
 	 * @param array $options
 	 * Options can be :
+	 *   - use_prefix : prepend stack prefix (default: false)
 	 *   - mode : mkdir mode (default 0755)
 	 *   - allowed_mime : array of allowed MIME types (default: [image/jpeg, image/png, image/gif])
 	 */
@@ -52,7 +53,7 @@ class FileStorageBackend implements StorageBackendInterface {
     		 * The stack prefix is the part of the URL that is used to detect wich stack to trigger.
     		 * This implementation aims to store a file at the exact same URL so next requests could be served statically.
     		 */
-		    $path->getPrefix(),
+		    $this->getOption('use_prefix', false) ? $path->getPrefix() : null,
 		    $path->getPath(),
 		]));
 		$dirname = dirname($filename);
