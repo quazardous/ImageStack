@@ -11,6 +11,10 @@ use ImageStack\Cache\RawFileCache;
 use ImageStack\ImageBackend\CacheImageBackend;
 use ImageStack\ImageBackend\PathRuleImageBackend;
 use ImageStack\ImageBackend\PathRule\PatternPathRule;
+use Imagine\Gd\Imagine;
+use ImageStack\ImageManipulator\ConverterImageManipulator;
+use ImageStack\Image;
+use ImageStack\ImageBackend\ManipulatorImageBackend;
 
 class ImageBackendTests extends \PHPUnit_Framework_TestCase
 { 
@@ -154,7 +158,6 @@ class ImageBackendTests extends \PHPUnit_Framework_TestCase
         
     }
     
-     
     public function testPathRuleImageBackend()
     {
         $root = __DIR__ . '/resources';
@@ -166,5 +169,22 @@ class ImageBackendTests extends \PHPUnit_Framework_TestCase
         $path = 'photos/cat1_original.jpg';
         $image = $rib->fetchImage(new ImagePath('style/big/' . $path));
         $this->assertStringEqualsFile($root . '/' . $path, $image->getBinaryContent());
+    }
+    
+    public function testManipulatorImageBackend()
+    {
+        $root = __DIR__ . '/resources';
+        $path = 'photos/cat1_original.jpg';
+
+        $fib = new FileImageBackend($root);
+        $image = $fib->fetchImage(new ImagePath($path));
+        $this->assertEquals('image/jpeg', $image->getMimeType());
+        
+        $mib = new ManipulatorImageBackend($fib);
+        $mib->addImageManipulator(new ConverterImageManipulator(new Imagine(), [
+            'image/jpeg' => 'image/png',
+        ]));
+        $image = $mib->fetchImage(new ImagePath($path));
+        $this->assertEquals('image/png', $image->getMimeType());
     }
 }
