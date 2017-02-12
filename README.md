@@ -217,6 +217,8 @@ Wrappers for external optimizer:
 
 ## History
 
+  - 1.2: add watermark
+  - 1.1: add path rules
   - 1.0: current version
   - 0.9: pre version mainly a raw copy/paste from an old project
 
