@@ -3,8 +3,6 @@ namespace ImageStack\ImageBackend;
 
 use ImageStack\Api\ImageBackendInterface;
 use ImageStack\Api\ImagePathInterface;
-use ImageStack\Api\Exception\ImageBackendException as ApiImageBackendException;
-use ImageStack\ImageBackend\Exception\ImageBackendException;
 use ImageStack\OptionnableTrait;
 use ImageStack\Api\Exception\ImageNotFoundException;
 
