@@ -134,6 +134,12 @@ Path pattern rule, see `ImageStack\ImageManipulator\ThumbnailRule\PatternThumbna
 You can associate path patterns to thumbnail formats:
 
 ```php
+use ImageStack\ImageManipulator\ThumbnailerImageManipulator;
+use Imagine\Gd\Imagine;
+use ImageStack\ImagePath;
+use ImageStack\ImageManipulator\ThumbnailRule\PatternThumbnailRule;
+...
+
 $rules = [
     '|^images/styles/big/|' => '<500x300', // resize to fit in 500x300 box
     '|^images/styles/box/|' => '200x200', // resize/crop to 200x200 box
@@ -142,10 +148,10 @@ $rules = [
     '|.*|' => false, // trigger an image not found exception if nothing matches
 ];
 
-$tim = new \ImageStack\ImageManipulator\ThumbnailerImageManipulator(new \Imagine\Gd\Imagine());
+$tim = new ThumbnailerImageManipulator(new Imagine());
 
 foreach ($rules as $pattern => $format) {
-    $tim->addThumbnailRule(new \ImageStack\ImageManipulator\ThumbnailRule\PatternThumbnailRule($pattern, $format));
+    $tim->addThumbnailRule(new PatternThumbnailRule($pattern, $format));
 }
 
 // this will resize the given image to fit in a 500x300 box
@@ -157,6 +163,31 @@ $tim->manipulateImage($image, new ImagePath('images/200x150/photo.jpg'));
 // this will rise a 404
 $tim->manipulateImage($image, new ImagePath('bad/path/photo.jpg'));
 
+```
+
+##### Watermark image manipulator
+Add watermark to images.
+
+See `ImageStack\ImageManipulator\WatermarkImageManipulator`
+
+```php
+use ImageStack\ImageManipulator\WatermarkImageManipulator;
+use Imagine\Gd\Imagine;
+use ImageStack\ImagePath;
+...
+
+// repeat the watermark
+$wim = new WatermarkImageManipulator(new Imagine(), '/path/to/little-watermark.png', [
+    'repeat' => WatermarkImageManipulator::REPEAT_ALL,
+]);
+$wim->manipulateImage($image, new ImagePath('protected_image.jpg'));
+
+// reduce and anchor a big the watermark
+$wim = new WatermarkImageManipulator(new Imagine(), '/path/to/huge-watermark.png', [
+    'reduce' => WatermarkImageManipulator::REDUCE_INSET,
+    'anchor' => WatermarkImageManipulator::ANCHOR_BOTTOM|WatermarkImageManipulator::ANCHOR_RIGHT,
+]);
+$wim->manipulateImage($image, new ImagePath('protected_image.jpg'));
 ```
 
 ### Tests

@@ -30,6 +30,7 @@
             <file>tests/ImageOptimizerTests.php</file>
             <file>tests/ImageBackendTests.php</file>
             <file>tests/ImageManipulatorTests.php</file>
+            <file>tests/WatermarkImageManipulatorTests.php</file>
             <file>tests/RawFileCacheTests.php</file>
             <file>tests/StorageBackendTests.php</file>
             <file>tests/ImageStackTests.php</file>

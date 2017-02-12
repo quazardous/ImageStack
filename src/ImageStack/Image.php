@@ -38,6 +38,8 @@ class Image implements ImageWithImagineInterface
      */
     public function deprecateBinaryContent()
     {
+        $this->getMimeType();
+        $this->getImagineImage();
         $this->binaryContentDirty = true;
     }
 
