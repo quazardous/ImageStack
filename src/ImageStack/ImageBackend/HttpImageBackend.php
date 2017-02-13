@@ -22,14 +22,23 @@ class HttpImageBackend implements ImageBackendInterface {
 	 * HTTP image backend constructor.
 	 * @param string $rootUrl the root URL to look after images
 	 * @param array $options
-	 *   - curl : array of CURL options
-	 *   - intercept_exception : intercept all guzzle exception to throw an image not found exception (default: false)
+	 *   - curl: array of CURL options
+	 *   - allow_empty_root_url: the HTTP image backen will have no root URL so it can handle only full path in fetchImage().
+	 *   - intercept_exception: intercept all guzzle exception to throw an image not found exception (default: false)
 	 */
 	public function __construct($rootUrl, $options = array()) {
-	    if (!filter_var($rootUrl, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED)) {
-	        throw new \InvalidArgumentException('root URL cannot be empty');
-	    }
 		$this->setOptions($options);
+	    if (!$this->getOption('allow_empty_root_url', false)) {
+	        if (empty($rootUrl)) {
+	            throw new \InvalidArgumentException('root URL cannot be empty or use option allow_empty_root_url');
+	        }
+	    }
+	    if ($rootUrl) {
+    	    if (!filter_var($rootUrl, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED)) {
+    	        throw new \InvalidArgumentException('root URL is invalid');
+    	    }
+	    }
+	    
 		$this->setOption('root_url', $rootUrl);
 	}
 	
@@ -39,7 +48,12 @@ class HttpImageBackend implements ImageBackendInterface {
 	 * @return string
 	 */
 	protected function getImageUrl(ImagePathInterface $path) {
-	   return filter_var(rtrim($this->getOption('root_url'), '/') . '/' . $path->getPath(), FILTER_SANITIZE_URL);
+	    if ($this->getOption('root_url')) {
+	        $url = rtrim($this->getOption('root_url'), '/') . '/' . $path->getPath();
+	    } else {
+	        $url = $path->getPath();
+	    }
+	    return filter_var($url, FILTER_SANITIZE_URL);
 	}
 	
 	public function fetchImage(ImagePathInterface $path) {
