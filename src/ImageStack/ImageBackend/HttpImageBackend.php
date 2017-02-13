@@ -24,6 +24,7 @@ class HttpImageBackend implements ImageBackendInterface {
 	 * @param array $options
 	 *   - curl: array of CURL options
 	 *   - allow_empty_root_url: the HTTP image backen will have no root URL so it can handle only full path in fetchImage().
+	 *   - use_prefix : prepend stack prefix (default: false)
 	 *   - intercept_exception: intercept all guzzle exception to throw an image not found exception (default: false)
 	 */
 	public function __construct($rootUrl, $options = array()) {
@@ -48,10 +49,12 @@ class HttpImageBackend implements ImageBackendInterface {
 	 * @return string
 	 */
 	protected function getImageUrl(ImagePathInterface $path) {
+	    $url = $path->getPath();
+	    if ($this->getOption('use_prefix', false)) {
+	        $url = rtrim($path->getPrefix(), '/') . '/' . $url;
+	    }
 	    if ($this->getOption('root_url')) {
-	        $url = rtrim($this->getOption('root_url'), '/') . '/' . $path->getPath();
-	    } else {
-	        $url = $path->getPath();
+	        $url = rtrim($this->getOption('root_url'), '/') . '/' . $url;
 	    }
 	    return filter_var($url, FILTER_SANITIZE_URL);
 	}
