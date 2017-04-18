@@ -217,6 +217,7 @@ Wrappers for external optimizer:
 
 ## History
 
+  - 1.3: allow backend to have image manipulator
   - 1.2: add watermark
   - 1.1: add path rules
   - 1.0: current version

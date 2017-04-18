@@ -39,6 +39,7 @@ class RawFileCache implements Cache
      * Options:
      *  - metadata_root: the root dir for metadata (default: <root>/.cache_metadata)
      *  - dir_mode: mkdir() mode (default: 0755)
+     *  - hash_tree: add N folders levels based on path md5 (default: 0)
      * @throws \InvalidArgumentException
      */
     public function __construct($root, array $options = [])
@@ -46,6 +47,7 @@ class RawFileCache implements Cache
         if (empty($root)) {
             throw new \InvalidArgumentException('Root cannot be empty');
         }
+        $this->setOptions($options);
         $this->setOption('root', $root);
     }
     
@@ -173,12 +175,21 @@ class RawFileCache implements Cache
     protected function getFilename($id, $metadata = false)
     {
         $this->assertValidId($id);
+        $path = '';
+        if ($level = $this->getOption('hash_tree', 0)) {
+            $level = min(32, $level);
+            $md5 = md5($id);
+            for ($i = 0; $i < $level; ++$i) {
+                $path .= $md5[$i] . DIRECTORY_SEPARATOR;
+            }
+        }
+        $path .= $id;
         if ($metadata) {
             $root = $this->getOption('metadata_root', $this->getOption('root') . DIRECTORY_SEPARATOR . '.cache_metadata');
         } else {
             $root = $this->getOption('root');
         }
-        return rtrim(sanitize_path($root . DIRECTORY_SEPARATOR . $id), DIRECTORY_SEPARATOR);
+        return rtrim(sanitize_path($root . DIRECTORY_SEPARATOR . $path), DIRECTORY_SEPARATOR);
     }
     
     /**

@@ -112,4 +112,39 @@ class RawFileCacheTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($cache->contains($id));
     }
     
+    public function testRawFileCacheHashTree()
+    {
+        $root = TESTDIR . '/tree';
+        $level = 3;
+        $cache = new RawFileCache($root, ['hash_tree' => $level]);
+        
+        $id = 'a/b/e.serialized';
+        $data = [1, 2, 3];
+        $cache->save($id, $data);
+        
+        $path = '';
+        $md5 = md5($id);
+        for ($i = 0; $i < $level; ++$i) {
+            $path .= $md5[$i] . '/';
+        }
+        $path .= $id;
+        
+        $filename = $root . '/' . $path;
+        $this->assertFileExists($filename);
+        $this->assertStringEqualsFile($filename, serialize($data));
+        
+        $this->assertTrue($cache->contains($id));
+        
+        $copy = $cache->fetch($id);
+        $this->assertEquals($data, $copy);
+        
+        $data = new \DateTime();
+        $cache->save($id, $data);
+        
+        $cache->delete($id);
+        $this->assertFileNotExists($filename);
+        
+        $this->assertFalse($cache->contains($id));
+    }
+    
 }
