@@ -175,7 +175,7 @@ class RawFileCache implements Cache
     protected function getFilename($id, $metadata = false)
     {
         $this->assertValidId($id);
-        $path = '';
+        $path = rtrim(dirname($id), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         if ($level = $this->getOption('hash_tree', 0)) {
             $level = min(32, $level);
             $md5 = md5($id);
@@ -183,7 +183,7 @@ class RawFileCache implements Cache
                 $path .= $md5[$i] . DIRECTORY_SEPARATOR;
             }
         }
-        $path .= $id;
+        $path .= basename($id);
         if ($metadata) {
             $root = $this->getOption('metadata_root', $this->getOption('root') . DIRECTORY_SEPARATOR . '.cache_metadata');
         } else {

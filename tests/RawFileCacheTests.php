@@ -122,12 +122,12 @@ class RawFileCacheTests extends \PHPUnit_Framework_TestCase
         $data = [1, 2, 3];
         $cache->save($id, $data);
         
-        $path = '';
+        $path = rtrim(dirname($id), '/') . '/';
         $md5 = md5($id);
         for ($i = 0; $i < $level; ++$i) {
             $path .= $md5[$i] . '/';
         }
-        $path .= $id;
+        $path .= basename($id);
         
         $filename = $root . '/' . $path;
         $this->assertFileExists($filename);
