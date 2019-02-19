@@ -4,6 +4,7 @@ namespace ImageStack\Tests;
 use ImageStack\Image;
 use ImageStack\ImageOptimizer\JpegtranImageOptimizer;
 use ImageStack\ImageOptimizer\PngcrushImageOptimizer;
+use ImageStack\ImageOptimizer\GifsicleImageOptimizer;
 
 class ImageOptimizerTests extends \PHPUnit_Framework_TestCase
 {
@@ -41,5 +42,27 @@ class ImageOptimizerTests extends \PHPUnit_Framework_TestCase
         $optimizer->optimizeImage($image);
         
         $this->assertStringEqualsFile(__DIR__ . '/resources/optimizer/cat2_pngcrush.png', $image->getBinaryContent());
+    }
+
+    public function testGifsicleOptimizer()
+    {
+        $image = new Image(file_get_contents(__DIR__ . '/resources/photos/eclipse256.gif'));
+        
+        $optimizer = new GifsicleImageOptimizer();
+        
+        $optimizer->optimizeImage($image);
+        
+        $this->assertStringEqualsFile(__DIR__ . '/resources/optimizer/eclipse256.gif', $image->getBinaryContent());
+    }
+
+    public function testGifsicleOptimizerAnim()
+    {
+        $image = new Image(file_get_contents(__DIR__ . '/resources/photos/animated.gif'));
+        
+        $optimizer = new GifsicleImageOptimizer();
+        
+        $optimizer->optimizeImage($image);
+        
+        $this->assertStringEqualsFile(__DIR__ . '/resources/optimizer/animated.gif', $image->getBinaryContent());
     }
 }
