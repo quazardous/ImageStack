@@ -10,6 +10,7 @@ use ImageStack\ImageWithImagineInterface;
 use ImageStack\ImageManipulator\ThumbnailRule\ThumbnailRuleInterface;
 use ImageStack\ImagineAwareInterface;
 use ImageStack\ImageManipulator\Exception\ImageManipulatorException;
+use ImageStack\OptionnableTrait;
 
 /**
  * Thumbnailer image manipulator.
@@ -19,14 +20,24 @@ use ImageStack\ImageManipulator\Exception\ImageManipulatorException;
  *
  */
 class ThumbnailerImageManipulator implements ImageManipulatorInterface {
+    use OptionnableTrait;
     use ImagineAwareTrait;
     
-	public function __construct(ImagineInterface $imagine, array $thumbnailRules = [])
+    /**
+     * Converter image manipulator constructor.
+     * @param ImagineInterface $imagine
+     * @param array $conversions associative array [ <current_mime> => <new_mime> ]
+     * @param array $options
+     *   - imagine_options : array of options to pass to imagine (jpeg_quality, png_compression_level, etc)
+     */
+    public function __construct(ImagineInterface $imagine, array $thumbnailRules = [], array $options = [])
 	{
-	    $this->setImagine($imagine);
+	    $this->setImagine($imagine, $options['imagine_options'] ?? []);
+	    unset($options['imagine_options']);
         foreach ($thumbnailRules as $thumbnailRule) {
             $this->addThumbnailRule($thumbnailRule);
         }
+        $this->setOptions($options);
 	}
 	
 	/**
@@ -43,7 +54,7 @@ class ThumbnailerImageManipulator implements ImageManipulatorInterface {
 	    if ($thumbnailRule instanceof ImagineAwareInterface) {
 	        // not very LSP but handy
 	        if (!$thumbnailRule->getImagine()) {
-	           $thumbnailRule->setImagine($this->getImagine());
+	           $thumbnailRule->setImagine($this->getImagine(), $this->getImagineOptions());
 	        }
 	    }
 	    $this->thumbnailRules[] = $thumbnailRule;

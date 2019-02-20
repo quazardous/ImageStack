@@ -8,6 +8,9 @@ use ImageStack\Api\ImagePathInterface;
 use ImageStack\ImageWithImagineInterface;
 use ImageStack\Api\Exception\ImageNotFoundException;
 use ImageStack\ImageManipulator\ThumbnailRule\Exception\ThumbnailRuleException;
+use ImageStack\Api\Exception\ImageException;
+use Imagine\Imagick\Image as IImage;
+use ImageStack\ImageManipulator\AnimatedGifAwareImageManipulatorTrait;
 
 /**
  * Pattern thumbnail rule.
@@ -16,6 +19,7 @@ use ImageStack\ImageManipulator\ThumbnailRule\Exception\ThumbnailRuleException;
 class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterface
 {
     use ImagineAwareTrait;
+    use AnimatedGifAwareImageManipulatorTrait;
 
     /**
      * A preg_match() pattern.
@@ -99,10 +103,35 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
 		}
         // not very LSP but handy
         if (!$image->getImagine()) {
-           $image->setImagine($this->getImagine());
+            $image->setImagine($this->getImagine(), $this->getImagineOptions());
         }
-		$thumbnail = $image->getImagineImage()->thumbnail($size, $mode);
-		$image->setImagineImage($thumbnail);
+        
+        /** @var IImage $animated */
+        $animated = null;
+        $imagine = $image->getImagine();
+        if ($this->handleAnimatedGif($image, function (IImage $iimage) use ($imagine, $size, &$animated, $image) {
+            $animated = $imagine->create($size);
+            $animated->layers()->remove(0);
+            // we take first frame conf
+            /** @var IImage $iframe */
+            $iframe = $iimage->layers()[0];
+            $options = [
+                'flatten' => false,
+                'animated' => true,
+                'animated.delay' => $iframe->getImagick()->getImageDelay() * 10,
+                'animated.loop' => $iframe->getImagick()->getImageIterations(),
+            ];
+            // put those options for next binary dump only
+            $image->setEphemeralImagineOptions($options);
+        }, function (IImage $iframe) use ($size, $mode, &$animated) {
+            $animated->layers()->add($iframe->thumbnail($size, $mode));
+        }, function (IImage $iimage) {
+            // nothing
+        })) {
+            $image->setImagineImage($animated);
+            return true;
+        }
+        $image->setImagineImage($image->getImagineImage()->thumbnail($size, $mode));
 		return true;
     }
     

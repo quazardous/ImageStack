@@ -49,10 +49,10 @@ class Image implements ImageWithImagineInterface
      * @param string $binaryContent      
      * @param string $mimeType      
      */
-    public function __construct($binaryContent, $mimeType = null, ImagineInterface $imagine = null)
+    public function __construct($binaryContent, $mimeType = null, ImagineInterface $imagine = null, array $imagineOptions = [])
     {
         $this->setBinaryContent($binaryContent, $mimeType);
-        $this->setImagine($imagine);
+        if ($imagine) $this->setImagine($imagine, $imagineOptions);
     }
 
     /**
@@ -68,6 +68,8 @@ class Image implements ImageWithImagineInterface
         $this->mimeType = $mimeType;
         $this->binaryContentDirty = false;
         $this->imagineImage = null;
+        // we reset one shot dump options
+        $this->ephemeralImagineOptions = [];
     }
 
     /**
@@ -78,9 +80,11 @@ class Image implements ImageWithImagineInterface
     {
         if ($this->binaryContentDirty) {
             $mimeType = $this->getMimeType();
+            // we consider that 
+            $options = array_replace($this->ephemeralImagineOptions, $this->imagineOptions);
             $binaryContent = $this->getImagineImage()->get(
                     self::get_type_from_mime_type($mimeType),
-                    $this->imagineOptions);
+                $options);
             $this->setBinaryContent($binaryContent, $mimeType);
         }
         return $this->binaryContent;
@@ -106,15 +110,15 @@ class Image implements ImageWithImagineInterface
     /**
      * @var array
      */
-    protected $imagineOptions = [];
+    protected $ephemeralImagineOptions = [];
     
     /**
      * Set imagine options for binary content generation.
      * @param array $imagineOptions
      */
-    public function setImagineOptions(array $imagineOptions)
+    public function setEphemeralImagineOptions(array $imagineOptions)
     {
-        $this->imagineOptions = array_replace($this->imagineOptions, $imagineOptions);
+        $this->ephemeralImagineOptions = array_replace($this->ephemeralImagineOptions, $imagineOptions);
     }
     
     /**

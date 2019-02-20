@@ -193,13 +193,14 @@ class ImageManipulatorTests extends \PHPUnit_Framework_TestCase
             '/test/' => true,
         ];
         
-        $tim = new ThumbnailerImageManipulator(new Imagine());
+        $imagine = new Imagine();
+        $tim = new ThumbnailerImageManipulator($imagine);
         foreach ($rules as $pattern => $format) {
             $tim->addThumbnailRule(new PatternThumbnailRule($pattern, $format));
         }
         
         $image = new Image(file_get_contents(__DIR__ . '/resources/photos/cat1_original.jpg'));
-        $image->setImagine(new Imagine());
+        $image->setImagine($imagine);
         $tim->manipulateImage($image, new ImagePath('test/200x150/toto.jpg'));
         $box = [
             $image->getImagineImage()->getSize()->getWidth(),
@@ -207,6 +208,31 @@ class ImageManipulatorTests extends \PHPUnit_Framework_TestCase
         ];
         
         $this->assertEquals([200, 150], $box);
+    }
+    
+    public function testThumbnailerManipulatorAnimated()
+    {
+        $rules = [
+            '/NEVER/' => true,
+            '|^test/|' => '200x100',
+            '/test/' => true,
+            ];
+        $imagine = new \Imagine\Imagick\Imagine();
+        $tim = new ThumbnailerImageManipulator($imagine);
+        foreach ($rules as $pattern => $format) {
+            $tim->addThumbnailRule(new PatternThumbnailRule($pattern, $format));
+        }
+        
+        $image = new Image(file_get_contents(__DIR__ . '/resources/photos/animated.gif'));
+        $image->setImagine($imagine);
+        $tim->manipulateImage($image, new ImagePath('test/a.jpg'));
+        $box = [
+            $image->getImagineImage()->getSize()->getWidth(),
+            $image->getImagineImage()->getSize()->getHeight(),
+        ];
+        
+        $this->assertEquals([200, 100], $box);
+        return;
     }
     
 }

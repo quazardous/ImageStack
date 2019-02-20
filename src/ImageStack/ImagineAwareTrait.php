@@ -12,12 +12,17 @@ trait ImagineAwareTrait
     /**
      * @var ImagineInterface
      */
-    
     protected $imagine = null;
+
+    /**
+     * @var array
+     */
+    protected $imagineOptions = [];
+    
     /**
      * @param ImagineInterface $imagine
      */
-    public function setImagine(ImagineInterface $imagine = null)
+    public function setImagine(ImagineInterface $imagine = null, array $imagineOptions = [])
     {
         $this->imagine = $imagine;
     }
@@ -28,6 +33,14 @@ trait ImagineAwareTrait
     public function getImagine()
     {
         return $this->imagine;
+    }
+
+    /**
+     * @return array
+     */
+    public function getImagineOptions()
+    {
+        return $this->imagineOptions;
     }
     
 }

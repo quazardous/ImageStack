@@ -1,4 +1,5 @@
 <?php
+
 namespace ImageStack\ImageManipulator;
 
 use ImageStack\Api\ImageInterface;
@@ -29,7 +30,8 @@ class ConverterImageManipulator implements ImageManipulatorInterface, ImagineAwa
      */
 	public function __construct(ImagineInterface $imagine, array $conversions = [], array $options = [])
 	{
-	    $this->setImagine($imagine);
+	    $this->setImagine($imagine, $options['imagine_options'] ?? []);
+	    unset($options['imagine_options']);
         foreach ($conversions as $sourceMimeType => $destinationMimeType) {
             $this->addConversion($sourceMimeType, $destinationMimeType);
         }
@@ -70,9 +72,8 @@ class ConverterImageManipulator implements ImageManipulatorInterface, ImagineAwa
     {
         if (isset($this->convertMap[$image->getMimeType()])) {
             if (!$image->getImagine()) {
-                $image->setImagine($this->getImagine());
+                $image->setImagine($this->getImagine(), $this->getImagineOptions());
             }
-            $image->setImagineOptions($this->getOption('imagine_options', []));
             // trigger imagine image creation
             $image->getImagineImage();
             $image->setMimeType($this->convertMap[$image->getMimeType()]);

@@ -3,6 +3,7 @@ namespace ImageStack;
 
 use ImageStack\Api\ImageInterface;
 use Imagine\Image\ImageInterface as ImagineImageInterface;
+use ImageStack\Api\Exception\ImageException;
 
 /**
  * Image that can handle imagine image interface.
@@ -11,11 +12,17 @@ use Imagine\Image\ImageInterface as ImagineImageInterface;
  */
 interface ImageWithImagineInterface extends ImageInterface, ImagineAwareInterface
 {
+//     /**
+//      * Set permanet imagine options for binary content generation.
+//      * @param array $imagineOptions
+//      */
+//     public function setImagineOptions(array $imagineOptions);
+
     /**
-     * Set imagine options for binary content generation.
+     * Set ephemeral imagine options for binary content generation. Will be reste after generation.
      * @param array $imagineOptions
      */
-    public function setImagineOptions(array $imagineOptions);
+    public function setEphemeralImagineOptions(array $imagineOptions);
 
     /**
 	 * Return an imagine image object from the image binary content.

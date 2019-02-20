@@ -5,6 +5,7 @@ use ImageStack\ImageManipulator\WatermarkImageManipulator;
 use Imagine\Gd\Imagine;
 use ImageStack\Image;
 use ImageStack\ImagePath;
+use Imagine\Image\ImagineInterface;
 
 class WatermarkImageManipulatorTests extends \PHPUnit_Framework_TestCase
 {
@@ -40,172 +41,103 @@ class WatermarkImageManipulatorTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($r->invoke($wim, WatermarkImageManipulator::ANCHOR_TOP|WatermarkImageManipulator::ANCHOR_MIDDLE|WatermarkImageManipulator::ANCHOR_BOTTOM|WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_CENTER,
             WatermarkImageManipulator::ANCHOR_RIGHT));
     }
-    
-    protected function _testWatermarkManipulator($number, array $options, $watermark = __DIR__ . '/resources/watermark/tux-goku.png')
+    // = __DIR__ . '/resources/photos/penguins.jpg'
+    protected function _testWatermarkManipulator($number, array $options, $target, ImagineInterface $imagine)
     {
-        $wim = new WatermarkImageManipulator(new Imagine(), $watermark, $options);
-        $image = new Image(file_get_contents(__DIR__ . '/resources/photos/penguins.jpg'));
+        $watermark = $options['_watermark'] ?? __DIR__ . '/resources/watermark/tux-goku.png';
+        $wim = new WatermarkImageManipulator($imagine, $watermark, $options);
+        $image = new Image(file_get_contents($target));
+        $infos = pathinfo($target);
         $wim->manipulateImage($image, new ImagePath('test'));
         $root = TESTDIR . '/watermark';
         if (!is_dir($root)) mkdir($root, 0755, true);
-        $path = '/' . sprintf('%03d', $number) . '-penguins_watermark.jpg';
+        $path = '/' . sprintf('%03d', $number) . '-' . $infos['filename'] . '-watermarked.' . $infos['extension'];
         file_put_contents($root . $path, $image->getBinaryContent());
         $this->assertFileExists($root . $path);
     }
     
     // not really tests but you can verify images with watermark in /tmp/ImageStackXYZ/watermark
-    public function test000()
+    public function testGo()
     {
-        $this->_testWatermarkManipulator(0, []);
-    }
-    
-    public function test001()
-    {
-        $this->_testWatermarkManipulator(1, ['anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_TOP]);
-    }
-
-    public function test002()
-    {
-        $this->_testWatermarkManipulator(2, ['anchor' => WatermarkImageManipulator::ANCHOR_CENTER|WatermarkImageManipulator::ANCHOR_TOP]);
-    }
-
-    public function test003()
-    {
-        $this->_testWatermarkManipulator(3, ['anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_TOP]);
-    }
-    
-    public function test004()
-    {
-        $this->_testWatermarkManipulator(4, ['anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_MIDDLE]);
-    }
-
-    public function test005()
-    {
-        $this->_testWatermarkManipulator(5, ['anchor' => WatermarkImageManipulator::ANCHOR_CENTER|WatermarkImageManipulator::ANCHOR_MIDDLE]);
-    }
-
-    public function test006()
-    {
-        $this->_testWatermarkManipulator(6, ['anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_MIDDLE]);
-    }
-
-    public function test007()
-    {
-        $this->_testWatermarkManipulator(7, ['anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_BOTTOM]);
-    }
-
-    public function test008()
-    {
-        $this->_testWatermarkManipulator(8, ['anchor' => WatermarkImageManipulator::ANCHOR_CENTER|WatermarkImageManipulator::ANCHOR_BOTTOM]);
-    }
-
-    public function test009()
-    {
-        $this->_testWatermarkManipulator(9, ['anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_BOTTOM]);
-    }
-
-    public function test010()
-    {
-        $this->_testWatermarkManipulator(10, [
-            'anchor' => WatermarkImageManipulator::ANCHOR_CENTER|WatermarkImageManipulator::ANCHOR_MIDDLE,
-            'repeat' => WatermarkImageManipulator::REPEAT_ALL,
-        ]);
-    }
-    public function test011()
-    {
-        $this->_testWatermarkManipulator(11, [
-            'anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_TOP,
-            'repeat' => WatermarkImageManipulator::REPEAT_ALL,
-        ]);
-    }
-    public function test012()
-    {
-        $this->_testWatermarkManipulator(12, [
-            'anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_TOP,
-            'repeat' => WatermarkImageManipulator::REPEAT_X,
-        ]);
-    }
-    public function test013()
-    {
-        $this->_testWatermarkManipulator(13, [
-            'anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_TOP,
-            'repeat' => WatermarkImageManipulator::REPEAT_Y,
-        ]);
-    }
-    public function test014()
-    {
-        $this->_testWatermarkManipulator(14, [
-            'anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_TOP,
-            'repeat' => WatermarkImageManipulator::REPEAT_X,
-        ]);
-    }
-    public function test015()
-    {
-        $this->_testWatermarkManipulator(15, [
-            'anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_TOP,
-            'repeat' => WatermarkImageManipulator::REPEAT_Y,
-        ]);
-    }
-    public function test016()
-    {
-        $this->_testWatermarkManipulator(16, [
-            'anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_BOTTOM,
-            'repeat' => WatermarkImageManipulator::REPEAT_X,
-        ]);
-    }
-    public function test017()
-    {
-        $this->_testWatermarkManipulator(17, [
-            'repeat' => WatermarkImageManipulator::REPEAT_X,
-        ]);
-    }
-    public function test018()
-    {
-        $this->_testWatermarkManipulator(18, [
-            'repeat' => WatermarkImageManipulator::REPEAT_Y,
-        ]);
-    }
-    public function test019()
-    {
-        $this->_testWatermarkManipulator(19, [], __DIR__ . '/resources/watermark/do-not-copy.png');
-    }
-    public function test020()
-    {
-        $this->_testWatermarkManipulator(20, [
-            'anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_TOP,
-        ], __DIR__ . '/resources/watermark/do-not-copy.png');
-    }
-    public function test021()
-    {
-        $this->_testWatermarkManipulator(21, [
-            'anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_BOTTOM,
-        ], __DIR__ . '/resources/watermark/do-not-copy.png');
-    }
-    public function test022()
-    {
-        $this->_testWatermarkManipulator(22, [
-            'anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_TOP,
-            'reduce' => WatermarkImageManipulator::REDUCE_INSET,
-        ], __DIR__ . '/resources/watermark/do-not-copy.png');
-    }
-    public function test023()
-    {
-        $this->_testWatermarkManipulator(23, [
-            'anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_BOTTOM,
-            'reduce' => WatermarkImageManipulator::REDUCE_INSET,
-        ], __DIR__ . '/resources/watermark/do-not-copy.png');
-    }
-    public function test024()
-    {
-        $this->_testWatermarkManipulator(24, [
-            'reduce' => WatermarkImageManipulator::REDUCE_INSET,
-        ], __DIR__ . '/resources/watermark/do-not-copy.png');
-    }
-    public function test025()
-    {
-        $this->_testWatermarkManipulator(25, [
-            'reduce' => WatermarkImageManipulator::REDUCE_OUTBOUND,
-        ], __DIR__ . '/resources/watermark/do-not-copy.png');
+        $tests = [
+            [],
+            ['anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_TOP],
+            ['anchor' => WatermarkImageManipulator::ANCHOR_CENTER|WatermarkImageManipulator::ANCHOR_TOP],
+            ['anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_TOP],
+            ['anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_MIDDLE],
+            ['anchor' => WatermarkImageManipulator::ANCHOR_CENTER|WatermarkImageManipulator::ANCHOR_MIDDLE],
+            ['anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_MIDDLE],
+            ['anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_BOTTOM],
+            ['anchor' => WatermarkImageManipulator::ANCHOR_CENTER|WatermarkImageManipulator::ANCHOR_BOTTOM],
+            ['anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_BOTTOM],
+            [
+                'anchor' => WatermarkImageManipulator::ANCHOR_CENTER|WatermarkImageManipulator::ANCHOR_MIDDLE,
+                'repeat' => WatermarkImageManipulator::REPEAT_ALL,
+            ],
+            [
+                'anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_TOP,
+                'repeat' => WatermarkImageManipulator::REPEAT_ALL,
+            ],
+            [
+                'anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_TOP,
+                'repeat' => WatermarkImageManipulator::REPEAT_X,
+            ],
+            [
+                'anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_TOP,
+                'repeat' => WatermarkImageManipulator::REPEAT_Y,
+            ],
+            [
+                'anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_TOP,
+                'repeat' => WatermarkImageManipulator::REPEAT_X,
+            ],
+            [
+                'anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_TOP,
+                'repeat' => WatermarkImageManipulator::REPEAT_Y,
+            ],
+            [
+                'anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_BOTTOM,
+                'repeat' => WatermarkImageManipulator::REPEAT_X,
+            ],[
+                'repeat' => WatermarkImageManipulator::REPEAT_X,
+            ],[
+                'repeat' => WatermarkImageManipulator::REPEAT_Y,
+            ],
+            [
+                '_watermark' => __DIR__ . '/resources/watermark/do-not-copy.png',
+            ],
+            [
+                'anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_TOP,
+                '_watermark' => __DIR__ . '/resources/watermark/do-not-copy.png',
+            ],
+            [
+                'anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_BOTTOM,
+                '_watermark' => __DIR__ . '/resources/watermark/do-not-copy.png',
+            ],
+            [
+                'anchor' => WatermarkImageManipulator::ANCHOR_LEFT|WatermarkImageManipulator::ANCHOR_TOP,
+                'reduce' => WatermarkImageManipulator::REDUCE_INSET,
+                '_watermark' => __DIR__ . '/resources/watermark/do-not-copy.png',
+            ],
+            [
+                'anchor' => WatermarkImageManipulator::ANCHOR_RIGHT|WatermarkImageManipulator::ANCHOR_BOTTOM,
+                'reduce' => WatermarkImageManipulator::REDUCE_INSET,
+                '_watermark' => __DIR__ . '/resources/watermark/do-not-copy.png',
+            ],
+            [
+                'reduce' => WatermarkImageManipulator::REDUCE_INSET,
+                '_watermark' => __DIR__ . '/resources/watermark/do-not-copy.png',
+            ],
+            [
+                'reduce' => WatermarkImageManipulator::REDUCE_OUTBOUND,
+                '_watermark' => __DIR__ . '/resources/watermark/do-not-copy.png',
+            ],
+        ];
+        
+        foreach ($tests as $i => $test) {
+            foreach ([__DIR__ . '/resources/photos/penguins.jpg' => new Imagine(), __DIR__ . '/resources/photos/animated.gif' => new \Imagine\Imagick\Imagine()] as $target => $imagine) {
+                $this->_testWatermarkManipulator($i, $test, $target, $imagine);
+            }
+        }
     }
 
 }

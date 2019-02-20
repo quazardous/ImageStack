@@ -57,6 +57,13 @@ class ImageTests extends \PHPUnit_Framework_TestCase
         $image = new Image(file_get_contents($filename));
         $this->assertEquals('image/jpeg', $image->getMimeType());
         $this->assertStringEqualsFile($filename, $image->getBinaryContent());
+        
+        $filename = __DIR__ . '/resources/optimizer/animated.gif';
+        $image = new Image(file_get_contents($filename));
+        $this->assertEquals('image/gif', $image->getMimeType());
+        $this->assertStringEqualsFile($filename, $image->getBinaryContent());
+        $imagine = new \Imagine\Gd\Imagine();
+        
     }
     
     public function testAllImagineImage()

@@ -13,6 +13,7 @@ use ImageStack\ImagineAwareInterface;
 use Imagine\Image\Point;
 use Imagine\Image\Box;
 use Imagine\Image\Palette\RGB;
+use Imagine\Imagick\Image as IImage;
 
 /**
  * Watermark image manipulator.
@@ -23,6 +24,7 @@ use Imagine\Image\Palette\RGB;
 class WatermarkImageManipulator implements ImageManipulatorInterface, ImagineAwareInterface {
     use OptionnableTrait;
     use ImagineAwareTrait;
+    use AnimatedGifAwareImageManipulatorTrait;
     
     const ANCHOR_LEFT   = 0x01;
     const ANCHOR_CENTER = 0x02;
@@ -52,7 +54,8 @@ class WatermarkImageManipulator implements ImageManipulatorInterface, ImagineAwa
      */
 	public function __construct(ImagineInterface $imagine, $watermark, array $options = [])
 	{
-	    $this->setImagine($imagine);
+	    $this->setImagine($imagine, $options['imagine_options'] ?? []);
+	    unset($options['imagine_options']);
         $this->watermark = $watermark;
         $this->setOptions($options);
 	}
@@ -84,9 +87,8 @@ class WatermarkImageManipulator implements ImageManipulatorInterface, ImagineAwa
     protected function _manipulateImage(ImageWithImagineInterface $image, ImagePathInterface $path)
     {
         if (!$image->getImagine()) {
-            $image->setImagine($this->getImagine());
+            $image->setImagine($this->getImagine(), $this->getImagineOptions());
         }
-        $image->setImagineOptions($this->getOption('imagine_options', []));
         
         $reduce = $this->getOption('reduce', static::REDUCE_NONE);
         $anchor = $this->getOption('anchor', static::ANCHOR_CENTER | static::ANCHOR_MIDDLE);
@@ -210,7 +212,31 @@ class WatermarkImageManipulator implements ImageManipulatorInterface, ImagineAwa
             if ($repeatY) $deltaY = 0;
         }
         
-        $iImage->paste($watermark, new Point($deltaX, $deltaY));
+        $deltaP = new Point($deltaX, $deltaY);
+        
+        if ($this->handleAnimatedGif($image, function (IImage $iimage) use ($image) {
+            // we take first frame conf
+            /** @var IImage $iframe */
+            $iframe = $iimage->layers()[0];
+            $options = [
+                'flatten' => false,
+                'animated' => true,
+                'animated.delay' => $iframe->getImagick()->getImageDelay() * 10,
+                'animated.loop' => $iframe->getImagick()->getImageIterations(),
+            ];
+            // put those options for next binary dump only
+            $image->setEphemeralImagineOptions($options);
+            
+        }, function (IImage $iframe) use ($watermark, $deltaP) {
+            $iframe->paste($watermark, $deltaP);
+        }, function (IImage $iimage) {
+            // nothing
+        })) {
+            
+            $image->deprecateBinaryContent();
+            return;
+        }
+        $iImage->paste($watermark, $deltaP);
         $image->deprecateBinaryContent();
     }
     

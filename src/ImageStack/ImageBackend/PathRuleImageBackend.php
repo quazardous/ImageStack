@@ -27,12 +27,8 @@ class PathRuleImageBackend implements ImageBackendInterface
     /**
      * Cache image backend constructor.
      * @param ImageBackendInterface $imageBackend
-     * @param Cache $cache
+     * @param array $rules
      * @param array $options
-     * Options:
-     *   - cache_prefix : prefix for the cache (default: stack prefix)
-     *   - cache_lifetime : cache lifetime (default: 0 is forever)
-     *   - cache_id_sanitizer : callback to sanitize the cache ID (default: none)
      */    
     public function __construct(ImageBackendInterface $imageBackend, array $rules = [], $options = array())
     {

@@ -13,7 +13,7 @@ interface ImagineAwareInterface
      * Set imagine interace.
      * @param ImagineInterface $imagine
      */
-    public function setImagine(ImagineInterface $imagine = null);
+    public function setImagine(ImagineInterface $imagine = null, array $imagineOptions = []);
     
     /**
      * Get imagine interface.
@@ -21,4 +21,9 @@ interface ImagineAwareInterface
      */
     public function getImagine();
     
+    
+    /**
+     * @return array
+     */
+    public function getImagineOptions();
 }

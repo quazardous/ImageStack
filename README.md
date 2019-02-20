@@ -205,7 +205,7 @@ phpunit.phar
 ```
 
 ## Dependencies / support
-Tested against [PHP 5.6](http://php.net/) and [PHP 7.1](http://php.net/).
+Tested against [PHP 7.1](http://php.net/).
 
 Current implementation uses [Imagine](https://github.com/avalanche123/Imagine).
 
@@ -214,9 +214,12 @@ You will need either `php-gd`, `php-gmagick` or `php-imagick`.
 Wrappers for external optimizer:
   - [jpegtran](http://jpegclub.org/jpegtran/)
   - [pngcrush](https://pmt.sourceforge.io/pngcrush/)
+  - [gifsicle](https://pmt.sourceforge.io/pngcrush/)
 
 ## History
 
+  - 1.5: add animated GIFs support in thumbnail and watermark (Imagick only)
+  - 1.4: add optimize gifsicle
   - 1.3: allow backend to have image manipulator
   - 1.2: add watermark
   - 1.1: add path rules
