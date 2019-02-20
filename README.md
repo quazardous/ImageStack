@@ -5,7 +5,10 @@ The main goal is to provide a robust framework to create an "on the fly" image t
 
 This project is only the framework part. The framework is brick designed so that you can put together your own image serving project and add special bricks.
 
-See [SilexImageStack](https://github.com/quazardous/SilexImageStack) and [SilexImageStackDemo](https://github.com/quazardous/SilexImageStackDemo) for more infos.
+## Framework integration:
+
+  - [Symfony 4](https://symfony.com/4) bundle: [Imagestack Bundle](https://github.com/quazardous/imagestack-bundle)
+  - [Silex](https://silex.symfony.com/) provider: [SilexImageStack](https://github.com/quazardous/SilexImageStack)
 
 ## Installation
 
