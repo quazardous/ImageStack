@@ -4,6 +4,7 @@
     "keywords": ["image"],
     "license": "MIT",
     "require": {
+    	"php": "^7.1",
         "imagine/imagine": "^0.6",
         "guzzlehttp/guzzle": "^6.2",
         "doctrine/cache": "^1.6"

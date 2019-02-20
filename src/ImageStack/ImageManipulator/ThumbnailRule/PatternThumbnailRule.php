@@ -108,10 +108,12 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
         
         /** @var IImage $animated */
         $animated = null;
+        $options = null;
         $imagine = $image->getImagine();
         if ($this->handleAnimatedGif($image, function (IImage $iimage) use ($imagine, $size, &$animated, $image) {
             $animated = $imagine->create($size);
             $animated->layers()->remove(0);
+            $image->setImagineImage($animated);
             // we take first frame conf
             /** @var IImage $iframe */
             $iframe = $iimage->layers()[0];
@@ -121,14 +123,13 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
                 'animated.delay' => $iframe->getImagick()->getImageDelay() * 10,
                 'animated.loop' => $iframe->getImagick()->getImageIterations(),
             ];
-            // put those options for next binary dump only
             $image->setEphemeralImagineOptions($options);
         }, function (IImage $iframe) use ($size, $mode, &$animated) {
             $animated->layers()->add($iframe->thumbnail($size, $mode));
         }, function (IImage $iimage) {
             // nothing
         })) {
-            $image->setImagineImage($animated);
+            // nothing
             return true;
         }
         $image->setImagineImage($image->getImagineImage()->thumbnail($size, $mode));
