@@ -96,7 +96,7 @@ class WatermarkImageManipulator implements ImageManipulatorInterface, ImagineAwa
         
         $iImage = $image->getImagineImage();
         
-        $watermark = $this->getWatermarkImagineImage();
+        $watermark = $this->getWatermarkImagineImage($iImage);
         
         if ($iImage->getSize()->getWidth() < $watermark->getSize()->getWidth()
             || $iImage->getSize()->getHeight() < $watermark->getSize()->getHeight()) {
@@ -248,10 +248,16 @@ class WatermarkImageManipulator implements ImageManipulatorInterface, ImagineAwa
     /**
      * @return \Imagine\Image\ImageInterface
      */
-    protected function getWatermarkImagineImage()
+    protected function getWatermarkImagineImage(\Imagine\Image\ImageInterface $iImage)
     {
         if (empty($this->watermarkImagineImage)) {
-            $this->watermarkImagineImage = $this->getImagine()->open($this->watermark);
+            if ($this->watermark instanceof \Imagine\Image\ImageInterface) {
+                $this->watermarkImagineImage = $this->watermark;
+            } elseif (is_callable($this->watermark)) {
+                $this->watermarkImagineImage = call_user_func($this->watermark, $iImage, $this->getImagine());
+            } else {
+                $this->watermarkImagineImage = $this->getImagine()->open($this->watermark);
+            }
         }
         return $this->watermarkImagineImage;
     }
