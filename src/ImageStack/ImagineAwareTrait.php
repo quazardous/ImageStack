@@ -25,6 +25,7 @@ trait ImagineAwareTrait
     public function setImagine(ImagineInterface $imagine = null, array $imagineOptions = [])
     {
         $this->imagine = $imagine;
+        $this->imagineOptions = $imagineOptions;
     }
 
     /**

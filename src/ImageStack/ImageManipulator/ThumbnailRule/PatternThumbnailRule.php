@@ -46,10 +46,13 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
      * formats examples:
      *  - 300x200: try to fit in the 300x200 box without cropping
      *  - <64: crop to fil in the 64x64 box
+     * @param string $filter
+     * @see \Imagine\Image\ImageInterface::FILTER_*
      */
-    public function __construct($pattern, $format) {
+    public function __construct($pattern, $format, $filter = \Imagine\Image\ImageInterface::FILTER_UNDEFINED) {
         $this->pattern = $pattern;
         $this->format = $format;
+        $this->filter = $filter;
     }
     
     /**
@@ -108,7 +111,6 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
         
         /** @var IImage $animated */
         $animated = null;
-        $options = null;
         $imagine = $image->getImagine();
         if ($this->handleAnimatedGif($image, function (IImage $iimage) use ($imagine, $size, &$animated, $image) {
             $animated = $imagine->create($size);
@@ -132,7 +134,7 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
             // nothing
             return true;
         }
-        $image->setImagineImage($image->getImagineImage()->thumbnail($size, $mode));
+        $image->setImagineImage($image->getImagineImage()->thumbnail($size, $mode, $this->filter));
 		return true;
     }
     
