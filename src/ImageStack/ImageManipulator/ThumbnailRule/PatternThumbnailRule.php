@@ -90,8 +90,19 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
             throw new ImageNotFoundException(sprintf('Image not found: %s', $path->getPath()));
         }
         
+        if (is_null($format)) {
+            // passthrough: we want the original image
+            return true;
+        }
+        
+        // not very LSP but handy
+        if (!$image->getImagine()) {
+            $image->setImagine($this->getImagine(), $this->getImagineOptions());
+        }
+        
         if (true === $format) {
-            // we want the original image
+            // we want the original image size but will trigger a save
+            $image->deprecateBinaryContent();
             return true;
         }
         
@@ -104,10 +115,6 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
 		} else {
 			throw new ThumbnailRuleException(sprintf('Unsupported rule format: %s', (string)$format), ThumbnailRuleException::UNSUPPORTED_RULE_FORMAT);
 		}
-        // not very LSP but handy
-        if (!$image->getImagine()) {
-            $image->setImagine($this->getImagine(), $this->getImagineOptions());
-        }
         
         /** @var IImage $animated */
         $animated = null;
