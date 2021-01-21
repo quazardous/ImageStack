@@ -19,7 +19,7 @@ interface ImageWithImagineInterface extends ImageInterface, ImagineAwareInterfac
 //     public function setImagineOptions(array $imagineOptions);
 
     /**
-     * Set ephemeral imagine options for binary content generation. Will be reste after generation.
+     * Set ephemeral imagine options for binary content generation. Will be reset after generation.
      * @param array $imagineOptions
      */
     public function setEphemeralImagineOptions(array $imagineOptions);
