@@ -51,10 +51,10 @@ class HttpImageBackend implements ImageBackendInterface {
 	protected function getImageUrl(ImagePathInterface $path) {
 	    $url = $path->getPath();
 	    if ($this->getOption('use_prefix', false)) {
-	        $url = rtrim($path->getPrefix(), '/') . '/' . $url;
+	        $url = rtrim($path->getPrefix(), '/') . '/' . ltrim($url, '/');
 	    }
 	    if ($this->getOption('root_url')) {
-	        $url = rtrim($this->getOption('root_url'), '/') . '/' . $url;
+	        $url = rtrim($this->getOption('root_url'), '/') . '/' . ltrim($url, '/');
 	    }
 	    return filter_var($url, FILTER_SANITIZE_URL);
 	}
