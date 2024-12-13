@@ -84,7 +84,7 @@ class Image implements ImageWithImagineInterface
             // we consider that 
             $options = array_replace($this->ephemeralImagineOptions, $this->imagineOptions);
             $binaryContent = $this->getImagineImage()->get(
-                    self::get_type_from_mime_type($mimeType),
+                self::get_type_from_mime_type($mimeType),
                 $options);
             $this->setBinaryContent($binaryContent, $mimeType);
         }

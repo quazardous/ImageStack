@@ -109,16 +109,41 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
             $image->deprecateBinaryContent();
             return true;
         }
-        
+
+        $formats = (array) $format;
+
+        $handlers = [
+            [$this, 'handlerCrop'],
+            [$this, 'handlerZoom'],
+        ];
+
+        foreach ($formats as $format) {
+            $done = false;
+            foreach ($handlers as $handler) {
+                if (call_user_func($handler, $image, $format)) {
+                    $done = true;
+                    break;
+                }
+            }
+            if (!$done) {
+                throw new ThumbnailRuleException(sprintf('Unsupported rule format: %s', (string)$format), ThumbnailRuleException::UNSUPPORTED_RULE_FORMAT);
+            }
+        }
+
+		return true;
+    }
+
+    protected function handlerCrop(ImageWithImagineInterface $image, $format)
+    {
         if (preg_match('/^(\<)?([0-9]+)x([0-9]+)$/', $format, $matches)) {
-			$size = new \Imagine\Image\Box($matches[2], $matches[3]);
-			$mode = $matches[1] == '<' ? \Imagine\Image\ImageInterface::THUMBNAIL_INSET : \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
-		} elseif (preg_match('/^(\<)?([0-9]+)$/', $format, $matches)) {
-			$size = new \Imagine\Image\Box($matches[2], $matches[2]);
-			$mode = $matches[1] == '<' ? \Imagine\Image\ImageInterface::THUMBNAIL_INSET : \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
-		} else {
-			throw new ThumbnailRuleException(sprintf('Unsupported rule format: %s', (string)$format), ThumbnailRuleException::UNSUPPORTED_RULE_FORMAT);
-		}
+            $size = new \Imagine\Image\Box($matches[2], $matches[3]);
+            $mode = $matches[1] == '<' ? \Imagine\Image\ImageInterface::THUMBNAIL_INSET : \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+        } elseif (preg_match('/^(\<)?([0-9]+)$/', $format, $matches)) {
+            $size = new \Imagine\Image\Box($matches[2], $matches[2]);
+            $mode = $matches[1] == '<' ? \Imagine\Image\ImageInterface::THUMBNAIL_INSET : \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+        } else {
+            return false;
+        }
         
         /** @var IImage $animated */
         $animated = null;
@@ -146,7 +171,22 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
             return true;
         }
         $image->setImagineImage($image->getImagineImage()->thumbnail($size, $mode, $this->filter));
-		return true;
+        return true;
+    }
+
+    protected function handlerZoom(ImageWithImagineInterface $image, $format)
+    {
+        if (preg_match('/^x([0-9]*\.?[0-9]+)$/', $format, $matches)) {
+            $scale = floatval($matches[1]);
+            $size = $image->getImagineImage()->getSize();
+            $newSize = $size->scale($scale);
+            $image->setImagineImage($image->getImagineImage()->resize($newSize)->crop(new \Imagine\Image\Point(
+                max(0, ($newSize->getWidth() - $size->getWidth()) / 2),
+                max(0, ($newSize->getHeight() - $size->getHeight()) / 2)
+            ), $size));
+            return true;
+        }
+        return false;
     }
     
     /**
