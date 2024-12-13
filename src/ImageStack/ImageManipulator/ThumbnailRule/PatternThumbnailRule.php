@@ -115,6 +115,7 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
         $handlers = [
             [$this, 'handlerCrop'],
             [$this, 'handlerZoom'],
+            [$this, 'handlerCropCanvas'],
         ];
 
         foreach ($formats as $format) {
@@ -186,6 +187,49 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
             ), $size));
             return true;
         }
+        return false;
+    }
+
+    protected function handlerCropCanvas(ImageWithImagineInterface $image, $format)
+    {
+        $size = null;
+        $width = $height = 0;
+        $pp = false;
+        if (preg_match('/^\=([0-9]+)([%]?)x([0-9]+)([%]?)$/', $format, $matches)) {
+            $width = $matches[1];
+            $height = $matches[3];
+            if ($matches[2] == '%') {
+                $width = $image->getImagineImage()->getSize()->getWidth() * $width / 100;
+            }
+            if ($matches[4] == '%') {
+                $height = $image->getImagineImage()->getSize()->getHeight() * $height / 100;
+            }
+        } elseif (preg_match('/^\=([0-9]+)([%]?)$/', $format, $matches)) {
+            $width = $height = $matches[1];
+            if ($matches[2] == '%') {
+                $width = $image->getImagineImage()->getSize()->getWidth() * $width / 100;
+                $height = $image->getImagineImage()->getSize()->getHeight() * $height / 100;
+            }
+        }
+
+        if ($width > 0 && $height > 0) {
+            $size = new \Imagine\Image\Box($width, $height);
+            // print_r([
+            //     'ori_width' => $image->getImagineImage()->getSize()->getWidth(),
+            //     'ori_height' => $image->getImagineImage()->getSize()->getHeight(),
+            //     'width' => $width,
+            //     'height' => $height,
+            //     'x' => ($image->getImagineImage()->getSize()->getWidth() - $size->getWidth()) / 2,
+            //     'y' => ($image->getImagineImage()->getSize()->getHeight() - $size->getHeight()) / 2,
+            // ]); die();
+            $image->setImagineImage($image->getImagineImage()->crop(new \Imagine\Image\Point(
+                ($image->getImagineImage()->getSize()->getWidth() - $size->getWidth()) / 2,
+                ($image->getImagineImage()->getSize()->getHeight() - $size->getHeight()) / 2
+            ), $size));
+            $image->deprecateBinaryContent();
+            return true;
+        }
+
         return false;
     }
     
