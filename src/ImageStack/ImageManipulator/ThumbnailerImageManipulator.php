@@ -32,8 +32,8 @@ class ThumbnailerImageManipulator implements ImageManipulatorInterface {
      */
     public function __construct(ImagineInterface $imagine, array $thumbnailRules = [], array $options = [])
 	{
-	    $this->setImagine($imagine, $options['imagine_options'] ?? []);
-	    unset($options['imagine_options']);
+        $this->setImagine($imagine, $options['imagine_options'] ?? []);
+        unset($options['imagine_options']);
         foreach ($thumbnailRules as $thumbnailRule) {
             $this->addThumbnailRule($thumbnailRule);
         }
@@ -51,13 +51,13 @@ class ThumbnailerImageManipulator implements ImageManipulatorInterface {
 	 */
 	public function addThumbnailRule(ThumbnailRuleInterface $thumbnailRule)
 	{
-	    if ($thumbnailRule instanceof ImagineAwareInterface) {
+        if ($thumbnailRule instanceof ImagineAwareInterface) {
 	        // not very LSP but handy
-	        if (!$thumbnailRule->getImagine()) {
-	           $thumbnailRule->setImagine($this->getImagine(), $this->getImagineOptions());
-	        }
-	    }
-	    $this->thumbnailRules[] = $thumbnailRule;
+            if (!$thumbnailRule->getImagine()) {
+                $thumbnailRule->setImagine($this->getImagine(), $this->getImagineOptions());
+            }
+        }
+        $this->thumbnailRules[] = $thumbnailRule;
 	}
 	
 	/**
@@ -66,7 +66,7 @@ class ThumbnailerImageManipulator implements ImageManipulatorInterface {
 	 * @see \ImageStack\Api\ImageManipulatorInterface::manipulateImage()
 	 */
 	public function manipulateImage(ImageInterface $image, ImagePathInterface $path) {
-	    $this->_manipulateImage($image, $path);
+        $this->_manipulateImage($image, $path);
 	}
 
     /**

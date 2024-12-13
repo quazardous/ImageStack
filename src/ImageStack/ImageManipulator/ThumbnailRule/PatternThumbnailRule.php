@@ -32,6 +32,12 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
      * @var string
      */
     protected $format;
+
+    /**
+     * A thumbnail filter.
+     * @var string
+     */
+    protected $filter;
     
     /**
      * Pattern thumbnail rule constructor.

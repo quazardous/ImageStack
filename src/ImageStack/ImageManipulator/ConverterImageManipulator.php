@@ -30,8 +30,8 @@ class ConverterImageManipulator implements ImageManipulatorInterface, ImagineAwa
      */
 	public function __construct(ImagineInterface $imagine, array $conversions = [], array $options = [])
 	{
-	    $this->setImagine($imagine, $options['imagine_options'] ?? []);
-	    unset($options['imagine_options']);
+        $this->setImagine($imagine, $options['imagine_options'] ?? []);
+        unset($options['imagine_options']);
         foreach ($conversions as $sourceMimeType => $destinationMimeType) {
             $this->addConversion($sourceMimeType, $destinationMimeType);
         }
