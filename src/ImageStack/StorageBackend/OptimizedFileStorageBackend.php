@@ -1,4 +1,5 @@
 <?php
+
 namespace ImageStack\StorageBackend;
 
 use ImageStack\Api\ImageInterface;
@@ -23,28 +24,27 @@ class OptimizedFileStorageBackend extends FileStorageBackend {
      * @param array $options
      * @see FileStorageBackend::__construct()
      */
-	public function __construct($root, array $imageOptimizers = [], $options = []) {
-	    $this->optimizerImageManipulator = new OptimizerImageManipulator($imageOptimizers);
-	    parent::__construct($root, $options);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @see \ImageStack\StorageBackend\FileStorageBackend::storeImage()
-	 */
-	public function storeImage(ImageInterface $image, ImagePathInterface $path) {
-		$this->optimizerImageManipulator->manipulateImage($image, $path);
-		$this->writeImageFile($image, $path);
-	}
-	
-	/**
-	 * Register an image optimizer.
-	 * @param string $mimeType
-	 * @param ImageOptimizerInterface $imageOptimizer
-	 */
-	public function registerImageOptimizer(ImageOptimizerInterface $imageOptimizer)
-	{
-	    $this->optimizerImageManipulator->registerImageOptimizer($imageOptimizer);
-	}
-	
+    public function __construct($root, array $imageOptimizers = [], $options = []) {
+        $this->optimizerImageManipulator = new OptimizerImageManipulator($imageOptimizers);
+        parent::__construct($root, $options);
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \ImageStack\StorageBackend\FileStorageBackend::storeImage()
+     */
+    public function storeImage(ImageInterface $image, ImagePathInterface $path) {
+        $this->optimizerImageManipulator->manipulateImage($image, $path);
+        $this->writeImageFile($image, $path);
+    }
+    
+    /**
+     * Register an image optimizer.
+     * @param string $mimeType
+     * @param ImageOptimizerInterface $imageOptimizer
+     */
+    public function registerImageOptimizer(ImageOptimizerInterface $imageOptimizer)
+    {
+        $this->optimizerImageManipulator->registerImageOptimizer($imageOptimizer);
+    }
 }

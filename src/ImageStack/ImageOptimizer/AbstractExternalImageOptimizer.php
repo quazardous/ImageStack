@@ -31,57 +31,57 @@ abstract class AbstractExternalImageOptimizer implements ImageOptimizerInterface
      */
     abstract protected function getInputFileExtension();
     
-	/**
-	 * Get a non existing tempname.
-	 * @param string $variation
-	 * @return string
-	 */
-	protected function getTempnam($variation, $extention) {
-	    $prefix = $this->getOption('tempnam_prefix', 'eio') . $variation;
-		// tempnam() does not handle extension
-		while (true) {
-			$filename = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $prefix . substr(md5(uniqid().rand()), 0, 8) . '.' . $extention;
-			if (!is_file($filename)) {
-				return $filename;
-			}
-		}
-	}
+    /**
+     * Get a non existing tempname.
+     * @param string $variation
+     * @return string
+     */
+    protected function getTempnam($variation, $extention) {
+        $prefix = $this->getOption('tempnam_prefix', 'eio') . $variation;
+        // tempnam() does not handle extension
+        while (true) {
+            $filename = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $prefix . substr(md5(uniqid().rand()), 0, 8) . '.' . $extention;
+            if (!is_file($filename)) {
+                return $filename;
+            }
+        }
+    }
 
-	/**
-	 * Execute the external optimizer.
-	 * @param string $if input file (should be OK before exec)
-	 * @param string $binaryContent output binary content
-	 * @return string the MIME type of the generated file
-	 */
-	abstract protected function execExternalOptimizer($if, &$binaryContent);
-	
-	/**
-	 * {@inheritDoc}
-	 * @see \ImageStack\ImageOptimizer\ImageOptimizerInterface::optimizeImage()
-	 * @throws ImageOptimizerException
-	 */
-	public function optimizeImage(ImageInterface $image) {
-	    if (!in_array($image->getMimeType(), $this->getSupportedMimeTypes())) {
-			throw new ImageOptimizerException(sprintf('Unsupported MIME type : %s', $image->getMimeType()), ImageOptimizerException::UNSUPPORTED_MIME_TYPE);
-	    }
-	    $if = $this->getTempnam("if", $this->getInputFileExtension());
-		if (!file_put_contents($if, $image->getBinaryContent())) {
-			throw new ImageOptimizerException(sprintf('Cannot write tmpfile : %s', $if), ImageOptimizerException::CANNOT_WRITE_TMPFILE);
-		}
-		$binaryContent = null;
-		$mimeType = $this->execExternalOptimizer($if, $binaryContent);
-		unlink($if);
-		$image->setBinaryContent($binaryContent, $mimeType);
-	}
-	
-	/**
-	 * Optimizer can be used as image manipulator.
-	 * @param ImageInterface $image
-	 * @param ImagePathInterface $path (not used)
-	 * @see self::optimizeImage()
-	 */
-	public function manipulateImage(ImageInterface $image, ImagePathInterface $path)
-	{
-	    $this->optimizeImage($image);
-	}
+    /**
+     * Execute the external optimizer.
+     * @param string $if input file (should be OK before exec)
+     * @param string $binaryContent output binary content
+     * @return string the MIME type of the generated file
+     */
+    abstract protected function execExternalOptimizer($if, &$binaryContent);
+    
+    /**
+     * {@inheritDoc}
+     * @see \ImageStack\ImageOptimizer\ImageOptimizerInterface::optimizeImage()
+     * @throws ImageOptimizerException
+     */
+    public function optimizeImage(ImageInterface $image) {
+        if (!in_array($image->getMimeType(), $this->getSupportedMimeTypes())) {
+            throw new ImageOptimizerException(sprintf('Unsupported MIME type : %s', $image->getMimeType()), ImageOptimizerException::UNSUPPORTED_MIME_TYPE);
+        }
+        $if = $this->getTempnam("if", $this->getInputFileExtension());
+        if (!file_put_contents($if, $image->getBinaryContent())) {
+            throw new ImageOptimizerException(sprintf('Cannot write tmpfile : %s', $if), ImageOptimizerException::CANNOT_WRITE_TMPFILE);
+        }
+        $binaryContent = null;
+        $mimeType = $this->execExternalOptimizer($if, $binaryContent);
+        unlink($if);
+        $image->setBinaryContent($binaryContent, $mimeType);
+    }
+    
+    /**
+     * Optimizer can be used as image manipulator.
+     * @param ImageInterface $image
+     * @param ImagePathInterface $path (not used)
+     * @see self::optimizeImage()
+     */
+    public function manipulateImage(ImageInterface $image, ImagePathInterface $path)
+    {
+        $this->optimizeImage($image);
+    }
 }

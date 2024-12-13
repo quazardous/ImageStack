@@ -47,9 +47,9 @@ class ManipulatorImageBackend implements ImageBackendInterface
     public function fetchImage(ImagePathInterface $path)
     {
         $image = $this->imageBackend->fetchImage($path);
-		foreach ($this->imageManipulators as $imageManipulator) {
-		    $imageManipulator->manipulateImage($image, $path);
-		}
+        foreach ($this->imageManipulators as $imageManipulator) {
+            $imageManipulator->manipulateImage($image, $path);
+        }
         return $image;
     }
     

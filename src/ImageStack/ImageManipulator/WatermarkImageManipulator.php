@@ -52,23 +52,23 @@ class WatermarkImageManipulator implements ImageManipulatorInterface, ImagineAwa
      *   - reduce: REDUCE_XX constants (default: REDUCE_NONE), the watermark will be reduced if image is smaller
      *   - imagine_options : array of options to pass to imagine (jpeg_quality, png_compression_level, etc)
      */
-	public function __construct(ImagineInterface $imagine, $watermark, array $options = [])
-	{
-	    $this->setImagine($imagine, $options['imagine_options'] ?? []);
-	    unset($options['imagine_options']);
+    public function __construct(ImagineInterface $imagine, $watermark, array $options = [])
+    {
+        $this->setImagine($imagine, $options['imagine_options'] ?? []);
+        unset($options['imagine_options']);
         $this->watermark = $watermark;
         $this->setOptions($options);
-	}
-	
-	/**
-	 * @var string
-	 */
+    }
+    
+    /**
+     * @var string
+     */
     protected $watermark;
     
-	/**
-	 * {@inheritDoc}
-	 * @see \ImageStack\Api\ImageManipulatorInterface::manipulateImage()
-	 */
+    /**
+     * {@inheritDoc}
+     * @see \ImageStack\Api\ImageManipulatorInterface::manipulateImage()
+     */
     public function manipulateImage(ImageInterface $image, ImagePathInterface $path)
     {
         return $this->_manipulateImage($image, $path);

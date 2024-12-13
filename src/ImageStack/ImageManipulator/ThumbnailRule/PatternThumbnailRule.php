@@ -73,8 +73,6 @@ class PatternThumbnailRule implements ThumbnailRuleInterface, ImagineAwareInterf
     
     /**
      * Ensure ImageWithImagineInterface.
-     * @param ImageInterface $image
-     * @param ImagePathInterface $path
      * @return boolean
      */
     protected function _thumbnailImage(ImageWithImagineInterface $image, ImagePathInterface $path)

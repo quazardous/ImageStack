@@ -1,4 +1,5 @@
 <?php
+
 namespace ImageStack;
 
 use ImageStack\Api\ImageInterface;
@@ -217,5 +218,4 @@ class Image implements ImageWithImagineInterface
         if (isset($types[$mimeType])) return $types[$mimeType];
         throw new ImageException(sprintf('Unsupported MIME type: %s', $mimeType), ImageException::UNSUPPORTED_MIME_TYPE);
     }
-
 }

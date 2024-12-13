@@ -17,33 +17,33 @@ class OptimizerImageManipulator implements ImageManipulatorInterface {
      * Optimizer image manipulator constructor.
      * @param ImageOptimizerInterface[] $imageOptimizers
      */
-	public function __construct(array $imageOptimizers = []) {
+    public function __construct(array $imageOptimizers = []) {
         foreach ($imageOptimizers as $imageOptimizer) {
             $this->registerImageOptimizer($imageOptimizer);
         }
-	}
-	
-	/**
-	 * @var ImageOptimizerInterface[][]
-	 */
-	protected $imageOptimizers = [];
-	
-	/**
-	 * Register an image optimizer.
-	 * @param string $mimeType
-	 * @param ImageOptimizerInterface $imageOptimizer
-	 */
-	public function registerImageOptimizer(ImageOptimizerInterface $imageOptimizer)
-	{
-	    foreach ($imageOptimizer->getSupportedMimeTypes() as $mimeType) {
-	        $this->imageOptimizers[$mimeType][] = $imageOptimizer;
-	    }
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @see \ImageStack\Api\ImageManipulatorInterface::manipulateImage()
-	 */
+    }
+    
+    /**
+     * @var ImageOptimizerInterface[][]
+     */
+    protected $imageOptimizers = [];
+    
+    /**
+     * Register an image optimizer.
+     * @param string $mimeType
+     * @param ImageOptimizerInterface $imageOptimizer
+     */
+    public function registerImageOptimizer(ImageOptimizerInterface $imageOptimizer)
+    {
+        foreach ($imageOptimizer->getSupportedMimeTypes() as $mimeType) {
+            $this->imageOptimizers[$mimeType][] = $imageOptimizer;
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \ImageStack\Api\ImageManipulatorInterface::manipulateImage()
+     */
     public function manipulateImage(ImageInterface $image, ImagePathInterface $path)
     {
         /**
